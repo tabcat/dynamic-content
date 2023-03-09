@@ -1,1 +1,1 @@
-## Dynamic content on IPFS: IDs and Pinning 
+## Dynamic-Content IDs on IPFS
