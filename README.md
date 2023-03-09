@@ -1,1 +1,1 @@
-## Addressing and data redundancy of dynamic content on IPFS
+## Dynamic content on IPFS: IDs and Pinning 
