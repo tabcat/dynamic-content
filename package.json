@@ -1,0 +1,30 @@
+{
+  "name": "dynamic-content",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "concept of how to address and sync dynamic content using a pinning layer",
+  "scripts": {
+    "build": "tsc",
+    "example": "npm run build && node dist/index.js",
+    "interactive": "npm run build && node dist/interactive.js"
+  },
+  "author": "tabcat <tabcat00@proton.me>",
+  "license": "MIT",
+  "dependencies": {
+    "@chainsafe/libp2p-gossipsub": "^6.2.0",
+    "@chainsafe/libp2p-noise": "^11.0.4",
+    "@chainsafe/libp2p-yamux": "^3.0.7",
+    "@helia/ipns": "^1.1.0",
+    "@ipld/dag-cbor": "^9.0.0",
+    "@libp2p/kad-dht": "^8.0.6",
+    "@libp2p/mdns": "^7.0.3",
+    "@libp2p/tcp": "^6.1.5",
+    "aegir": "^38.1.8",
+    "go-ipfs": "^0.19.1",
+    "helia": "^1.0.3",
+    "ipfsd-ctl": "^13.0.0",
+    "kubo-rpc-client": "^3.0.1",
+    "merge-options": "^3.0.4",
+    "typescript": "^5.0.4"
+  }
+}

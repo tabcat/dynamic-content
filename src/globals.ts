@@ -1,0 +1,16 @@
+import type { Helia } from '@helia/interface'
+import type { IPNS } from '@helia/ipns'
+import type { Controller } from 'ipfsd-ctl'
+
+import { DynamicContent } from './dynamic-content.js'
+
+declare global {
+  var client1: Helia
+  var client2: Helia
+  var server: Helia
+  var name1: IPNS
+  var name2: IPNS
+  var dynamicContent: Awaited<ReturnType<typeof DynamicContent>>
+  var set1: Set<any>
+  var set2: Set<any>
+}
