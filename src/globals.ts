@@ -1,6 +1,7 @@
 import type { Helia } from '@helia/interface'
 import type { IPNS } from '@helia/ipns'
 import type { Controller } from 'ipfsd-ctl'
+import type { Stream } from '@libp2p/interface-connection'
 
 import { DynamicContent } from './dynamic-content.js'
 
@@ -15,4 +16,6 @@ declare global {
   var set2: Set<any>
   var update: (value: string) => Promise<void>
   var sync: () => Promise<void>
+  var connect: (client: Helia) => Promise<Stream>
+  var disconnect: (client: Helia) => Promise<void>
 }

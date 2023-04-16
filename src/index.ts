@@ -22,6 +22,7 @@ import all from 'it-all'
 import last from 'it-last'
 import type { Helia } from '@helia/interface'
 import type { ProviderEvent } from '@libp2p/interface-dht'
+import type { Stream } from '@libp2p/interface-connection'
 import type { PeerId } from '@libp2p/interface-peer-id'
 import type { BlockView } from 'multiformats/interface'
 
@@ -133,9 +134,9 @@ const set2: Set<string> = new Set()
 
 // write to client1
 const update = async (...values: string[]) => {
-  for (const value of values) {
-    set1.add(value)
-  }
+  const diff = Array.from(values).filter(value => !set1.has(value))
+  for (const value of values) { set1.add(value) }
+  console.log('client1: added new values to set { ${diff.join(', ')} }')
   const block = await encode(set1)
   console.log(`client1: encoded to raw data`)
   await push(block)
@@ -159,6 +160,9 @@ const sync = async () => {
   merge(set2, set1)
   console.log(`client2: added new values to set { ${diff.join(', ')} }`)
 }
+
+const connect = async (client: Helia) => await client.libp2p.dialProtocol((server.libp2p.getMultiaddrs())[0], '/ipfs/lan/kad/1.0.0')
+const disconnect = async (client: Helia) => await client.libp2p.getConnections().forEach(connection => connection.close())
 
 // client1 makes changes and goes offline
 {
@@ -207,6 +211,8 @@ global.set2 = set2
 global.dynamicContent = dynamicContent
 global.update = update
 global.sync = sync
+global.connect = connect
+global.disconnect = disconnect
 
 // @ts-expect-error
 global.all = all
