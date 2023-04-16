@@ -95,6 +95,13 @@ const query = (client: Helia) => async () => {
   return providers[0].providers[0].id
 }
 
+/**
+ * 
+ * 
+ * 
+ * 
+ */
+
 // (ipns -> cid)
 // update ipns record
 const publish = (client: Helia, name: IPNS) => async (cid: CID) => await name.publish(client.libp2p.peerId, cid)
@@ -125,21 +132,32 @@ const set1: Set<string> = new Set()
 const set2: Set<string> = new Set()
 
 // write to client1
-const update = async (value: string) => {
-  set1.add(value)
+const update = async (...values: string[]) => {
+  for (const value of values) {
+    set1.add(value)
+  }
   const block = await encode(set1)
-  await client1.blockstore.put(block.cid, block.bytes)
+  console.log(`client1: encoded to raw data`)
   await push(block)
+  console.log(`client1: pushed data to pinner`)
   await publish(client1, name1)(block.cid)
+  console.log(`client1: published ipns:${client1.libp2p.peerId} with value cid:${block.cid}`)
   await advertise(client1)()
+  console.log(`client1: advertised ipns:${client1.libp2p.peerId} as set provider`)
 }
 // sync to client2
 const sync = async () => {
   const peerId = await query(client2)()
+  console.log(`client2: found ipns:${peerId} as set provider`)
   const cid = await resolve(name2)(peerId)
+  console.log(`client2: resolved ipns:${peerId} to ${cid}`)
   const bytes = await pull(client2)(cid)
+  console.log(`client2: resolved ipfs:${cid} to raw data`)
   const set1 = await decode(bytes)
+  console.log(`client2: decoded raw data`)
+  const diff = Array.from(set1).filter(value => !set2.has(value))
   merge(set2, set1)
+  console.log(`client2: added new values to set { ${diff.join(', ')} }`)
 }
 
 // client1 makes changes and goes offline
