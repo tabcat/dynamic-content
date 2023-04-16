@@ -22,6 +22,7 @@ import all from 'it-all'
 import last from 'it-last'
 import type { Helia } from '@helia/interface'
 import type { ProviderEvent } from '@libp2p/interface-dht'
+import type { PeerId } from '@libp2p/interface-peer-id'
 import type { BlockView } from 'multiformats/interface'
 
 import './globals.js'
@@ -73,37 +74,88 @@ const dynamicContent = await DynamicContent({
   protocol: '/dynamic-content-example/set/1.0.0',
   param: { network: 1 }
 })
-// await client1.blockstore.put(dynamicContent.block.cid, dynamicContent.block.bytes)
+
+// (dcid -> ipns)
+// add ipns record into dht
+const advertise = (client: Helia) => async () => await all(client.libp2p.dht.provide(dynamicContent.id))
+// look for peers in the dht
+const query = (client: Helia) => async () => {
+  let i = 0
+  let providers: ProviderEvent[] = []
+  while (providers.length === 0 && i < 3) {
+    const responses = await all(client.libp2p.dht.findProviders(dynamicContent.id))
+    providers = responses.filter(r => r.name === 'PROVIDER') as ProviderEvent[]
+    i++
+  }
+
+  if (i === 3) {
+    throw new Error('cannot find providers')
+  }
+  
+  return providers[0].providers[0].id
+}
+
+// (ipns -> cid)
+// update ipns record
+const publish = (client: Helia, name: IPNS) => async (cid: CID) => await name.publish(client.libp2p.peerId, cid)
+// resolve ipns record
+const resolve = (name: IPNS) => async (peerId: PeerId) => await name.resolve(peerId)
+
+// (cid -> data)
+// push data to reliable host
+const push = async (b: BlockView<string[], 113, 18, 1>) => await server.blockstore.put(b.cid, b.bytes)
+// pull data over ipfs
+const pull = (client: Helia) => async (cid: CID) => await client.blockstore.get(cid)
+
+// (data -> set)
+// encode set to ipld
+const encode = async (s: Set<string>) =>
+  await Block.encode<string[], 113, 18>({ value: Array.from(set1), codec, hasher })
+// decode set from ipld
+const decode = async (bytes: Uint8Array) =>
+  new Set((await Block.decode<string[], 113, 18>({ bytes, codec, hasher })).value)
+
+// (set + set)
+// add value to set
+const add = (s: Set<string>) => (v: string) => s.add(v)
+// merge local and remote replicas
+const merge = (l: Set<string>, r: Set<string>) => r.forEach(l.add.bind(l))
 
 const set1: Set<string> = new Set()
 const set2: Set<string> = new Set()
 
+// write to client1
+const update = async (value: string) => {
+  set1.add(value)
+  const block = await encode(set1)
+  await client1.blockstore.put(block.cid, block.bytes)
+  await push(block)
+  await publish(client1, name1)(block.cid)
+  await advertise(client1)()
+}
+// sync to client2
+const sync = async () => {
+  const peerId = await query(client2)()
+  const cid = await resolve(name2)(peerId)
+  const bytes = await pull(client2)(cid)
+  const set1 = await decode(bytes)
+  merge(set2, set1)
+}
+
 // client1 makes changes and goes offline
 {
   // online
-  console.log('client1: online')
   await client1.start()
+  console.log('client1: online')
+
   await client1.libp2p.dialProtocol((server.libp2p.getMultiaddrs())[0], '/ipfs/lan/kad/1.0.0')
+  console.log('client1: dialed server')
 
-  console.log('client1: added an update to the set')
-  set1.add('nerf this')
-  
-  console.log('client1: encode and push data to host')
-  const block = await Block.encode<string[], 113, 18>({ value: Array.from(set1), codec, hasher })
-  await server.blockstore.put(block.cid, block.bytes)
+  await update('nerf this')
+  console.log('client1: updated the set')
 
-  console.log('client1: publish ipns record of local replica')
-  console.log(`client1: replica cid is ${block.cid}`)
-  await name1.publish(client1.libp2p.peerId, block.cid)
-
-  console.log('client1: publish ipns to dht')
-  /**
-   * This is a hack.
-   */
-  await all(client1.libp2p.dht.provide(dynamicContent.id))
-
-  console.log('client1: offline')
   await client1.stop()
+  console.log('client1: offline')
 }
 
 console.log('--- no peers online, Zzzzz ---')
@@ -111,32 +163,17 @@ await new Promise(resolve => setTimeout(resolve, 3000))
 
 // client2 comes online and merges changes
 {
-  console.log('client2: online')
   await client2.start()
+  console.log('client2: online')
+
   await client2.libp2p.dialProtocol((server.libp2p.getMultiaddrs())[0], '/ipfs/lan/kad/1.0.0')
+  console.log('client2: dialed server')
 
-  console.log('client2: check dht for ipns records of database peers')
-  const [con] = await client2.libp2p.getConnections()
-  const responses1 = await all(client2.libp2p.dht.findProviders(dynamicContent.id)) // first responses always empty for some reason
-  const responses = await all(client2.libp2p.dht.findProviders(dynamicContent.id))
-  const provider = responses.filter(r => r.name === 'PROVIDER')[0] as ProviderEvent
-  const peerId = provider.providers[0].id
-  console.log('client2: found ipns record of database peer')
+  await sync()
+  console.log('client2: synced the updates')
 
-  // resolve ipns record
-  console.log('client2: resolving ipns record')
-  const replica = await name2.resolve(peerId)
-  console.log(`client2: replica cid is ${replica}`)
-
-  console.log('client2: decoding replica bytes')
-  const bytes = await client2.blockstore.get(replica)
-  const block = await Block.decode<string[], 113, 18>({ bytes, codec, hasher })
-
-  block.value.forEach(set2.add.bind(set2))
-  console.log('client2: merged remote replica with local')
- 
-  console.log('client2: offline')
   await client2.stop()
+  console.log('client2: offline')
 }
 
 await server.stop()
@@ -150,6 +187,8 @@ global.name2 = name2
 global.set1 = set1
 global.set2 = set2
 global.dynamicContent = dynamicContent
+global.update = update
+global.sync = sync
 
 // @ts-expect-error
 global.all = all

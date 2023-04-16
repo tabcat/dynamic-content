@@ -13,4 +13,6 @@ declare global {
   var dynamicContent: Awaited<ReturnType<typeof DynamicContent>>
   var set1: Set<any>
   var set2: Set<any>
+  var update: (value: string) => Promise<void>
+  var sync: () => Promise<void>
 }
