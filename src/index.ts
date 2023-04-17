@@ -186,12 +186,6 @@ await new Promise(resolve => setTimeout(resolve, 3000))
   console.log('client2: offline')
 }
 
-await Promise.all([
-  client1.stop(),
-  client2.stop(),
-  server.stop()
-])
-
 global.client1 = client1
 global.client2 = client2
 global.server = server

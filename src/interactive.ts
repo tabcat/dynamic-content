@@ -3,16 +3,6 @@ await import('./index.js')
 
 console.log('--- interactive example ---')
 
-await Promise.all([
-  client1.start(),
-  client2.start(),
-  server.start()
-])
-
-// random timeout, nice
-// clients fail to dial without this
-await new Promise(resolve => setTimeout(resolve, 1000))
-
 await connect(client1)
 console.log('client1: online')
 await connect(client2)
