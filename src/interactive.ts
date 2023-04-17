@@ -31,7 +31,6 @@ console.log(
 )
 
 repl.start('> ').on('exit', async () => {
-  console.log('stopping helia nodes')
   await Promise.all([
     client1.stop(),
     client2.stop(),
