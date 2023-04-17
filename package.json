@@ -19,11 +19,8 @@
     "@libp2p/kad-dht": "^8.0.6",
     "@libp2p/mdns": "^7.0.3",
     "@libp2p/tcp": "^6.1.5",
-    "aegir": "^38.1.8",
-    "go-ipfs": "^0.19.1",
     "helia": "^1.0.3",
-    "ipfsd-ctl": "^13.0.0",
-    "kubo-rpc-client": "^3.0.1",
+    "libp2p": "^0.44.0",
     "merge-options": "^3.0.4",
     "typescript": "^5.0.4"
   }
