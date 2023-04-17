@@ -16,6 +16,6 @@ declare global {
   var set2: Set<any>
   var update: (value: string) => Promise<void>
   var sync: () => Promise<void>
-  var connect: (client: Helia) => Promise<Stream>
+  var connect: (client: Helia) => Promise<void>
   var disconnect: (client: Helia) => Promise<void>
 }

@@ -41,7 +41,6 @@ const client1 = await createHeliaNode({
     clientMode: true
   }),
 })
-await client1.stop()
 
 const client2 = await createHeliaNode({
   dht: kadDHT({
@@ -54,7 +53,6 @@ const client2 = await createHeliaNode({
     clientMode: true
   })
 })
-await client2.stop()
 
 const server = await createHeliaNode({
   dht: kadDHT({
@@ -66,7 +64,7 @@ const server = await createHeliaNode({
     }
   })
 })
-console.log('server: online')
+console.log('server is pinning ipld/ipns and serving dht records')
 
 const name1 = await ipns(client1, [dht(client1)])
 const name2 = await ipns(client2, [dht(client2)])
@@ -89,19 +87,16 @@ const query = (client: Helia) => async () => {
     i++
   }
 
+  if (i > 0) {
+    console.log('dht query returned empty response')
+  }
+
   if (i === 3) {
     throw new Error('cannot find providers')
   }
   
   return providers[0].providers[0].id
 }
-
-/**
- * 
- * 
- * 
- * 
- */
 
 // (ipns -> cid)
 // update ipns record
@@ -136,7 +131,7 @@ const set2: Set<string> = new Set()
 const update = async (...values: string[]) => {
   const diff = Array.from(values).filter(value => !set1.has(value))
   for (const value of values) { set1.add(value) }
-  console.log('client1: added new values to set { ${diff.join(', ')} }')
+  console.log(`client1: added new values to set { ${diff.join(', ')} }`)
   const block = await encode(set1)
   console.log(`client1: encoded to raw data`)
   await push(block)
@@ -161,22 +156,19 @@ const sync = async () => {
   console.log(`client2: added new values to set { ${diff.join(', ')} }`)
 }
 
-const connect = async (client: Helia) => await client.libp2p.dialProtocol((server.libp2p.getMultiaddrs())[0], '/ipfs/lan/kad/1.0.0')
+const connect = async (client: Helia) => { await client.libp2p.dialProtocol((server.libp2p.getMultiaddrs())[0], '/ipfs/lan/kad/1.0.0') }
 const disconnect = async (client: Helia) => await client.libp2p.getConnections().forEach(connection => connection.close())
 
 // client1 makes changes and goes offline
 {
   // online
-  await client1.start()
+  await connect(client1)
   console.log('client1: online')
-
-  await client1.libp2p.dialProtocol((server.libp2p.getMultiaddrs())[0], '/ipfs/lan/kad/1.0.0')
-  console.log('client1: dialed server')
 
   await update('nerf this')
   console.log('client1: updated the set')
 
-  await client1.stop()
+  await disconnect(client1)
   console.log('client1: offline')
 }
 
@@ -185,21 +177,21 @@ await new Promise(resolve => setTimeout(resolve, 3000))
 
 // client2 comes online and merges changes
 {
-  await client2.start()
+  await connect(client2)
   console.log('client2: online')
-
-  await client2.libp2p.dialProtocol((server.libp2p.getMultiaddrs())[0], '/ipfs/lan/kad/1.0.0')
-  console.log('client2: dialed server')
 
   await sync()
   console.log('client2: synced the updates')
 
-  await client2.stop()
+  await disconnect(client2)
   console.log('client2: offline')
 }
 
-await server.stop()
-console.log('server: offline')
+await Promise.all([
+  client1.stop(),
+  client2.stop(),
+  server.stop()
+])
 
 global.client1 = client1
 global.client2 = client2
@@ -213,8 +205,3 @@ global.update = update
 global.sync = sync
 global.connect = connect
 global.disconnect = disconnect
-
-// @ts-expect-error
-global.all = all
-// @ts-expect-error
-global.last = last

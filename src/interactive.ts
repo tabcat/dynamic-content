@@ -2,18 +2,50 @@ import repl from 'repl'
 await import('./index.js')
 
 console.log('--- interactive example ---')
+
 await Promise.all([
   client1.start(),
   client2.start(),
   server.start()
 ])
-console.log('all nodes online')
 
 // random timeout, nice
+// clients fail to dial without this
 await new Promise(resolve => setTimeout(resolve, 1000))
 
-console.log('connecting clients to server')
-await client1.libp2p.dialProtocol((server.libp2p.getMultiaddrs())[0], '/ipfs/lan/kad/1.0.0')
-await client2.libp2p.dialProtocol((server.libp2p.getMultiaddrs())[0], '/ipfs/lan/kad/1.0.0')
+await connect(client1)
+console.log('client1: online')
+await connect(client2)
+console.log('client2: online')
 
-repl.start('> ').on('exit', () => process.exit(0))
+console.log(
+`
+  Usage:
+  
+  globals
+  
+  client1: helia client node (sender)
+  client2: helia client node (receiver)
+  server: helia ipld/ipns pinner and dht server
+  
+  // compare the 2 clients sets
+  set1: client1's set variable
+  set2: client2's set variable
+  
+  await connect(<client>)       // connects client to server
+  await disconnect(<client>)    // disconnects client from server
+  
+  await update(...<string[]>)   // create and publish changes from client1 - requires client1 to be connected
+  await sync()                  // syncs changes to client2 - requires client2 to be connected
+`
+)
+
+repl.start('> ').on('exit', async () => {
+  console.log('stopping helia nodes')
+  await Promise.all([
+    client1.stop(),
+    client2.stop(),
+    server.stop()
+  ])
+  process.exit(0)
+})
