@@ -74,9 +74,9 @@ const dynamicContent = await DynamicContent({
 })
 
 // (dcid -> ipns)
-// add ipns record into dht
+// add ipns key as provider for dcid
 const advertise = (client: Helia) => async () => await all(client.libp2p.dht.provide(dynamicContent.id))
-// look for peers in the dht
+// find providers of dcid to get ipns of collaborators
 const query = (client: Helia) => async () => {
   let i = 0
   let providers: ProviderEvent[] = []
