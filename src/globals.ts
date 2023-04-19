@@ -17,4 +17,5 @@ declare global {
   var sync: () => Promise<void>
   var connect: (client: Helia) => Promise<void>
   var disconnect: (client: Helia) => Promise<void>
+  var help: string
 }

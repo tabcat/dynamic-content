@@ -8,11 +8,13 @@ console.log('client1: online')
 await connect(client2)
 console.log('client2: online')
 
-console.log(
+global.help = 
 `
   Usage:
   
   globals
+
+  help: this message
   
   client1: helia client node (sender)
   client2: helia client node (receiver)
@@ -28,7 +30,7 @@ console.log(
   await update(...<string[]>)   // create and publish changes from client1 - requires client1 to be connected
   await sync()                  // syncs changes to client2 - requires client2 to be connected
 `
-)
+console.log(help)
 
 repl.start('> ').on('exit', async () => {
   await Promise.all([
