@@ -54,3 +54,5 @@ Describes the process of read/write dynamic content to IPFS:
 1. Query the DHT for Providers of the Dynamic Content's ID
 2. Resolve providers IPNS keys to CIDs
 3. Merge changes with local replica
+
+Note: in practice the DHT queries related to the Dynamic Content's ID just need to be ran to init, and then switch to a protocol meant for synchronous replication with online collaborators.
