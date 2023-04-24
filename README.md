@@ -1,6 +1,6 @@
 # Hosting Dynamic Content on IPFS
 
-Dynamic content model on IPFS by combining IPLD, IPNS, and Provider Records.
+Dynamic content on IPFS using IPLD, IPNS, and Provider Records.
 
 Read the article: [ARTICLE.md](./ARTICLE.md)
 
