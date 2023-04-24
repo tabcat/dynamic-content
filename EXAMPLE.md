@@ -6,6 +6,12 @@
 
 `npm install`
 
+### Run Examples
+
+There are two example scripts. One is interactive, meaning after the example runs a REPL is started with global variables available to operate the replication manually.
+
+The scripts are `npm run example` and `npm run interactive`.
+
 ## What is the example doing?
 
 The example consists of 2 clients and a server.
@@ -32,12 +38,6 @@ client2 goes offline
 Obviously this is a very high overview of what's going on.
 Important to remember only IPLD/IPNS/Provider Records are being used.
 It's a good idea to read [index.ts](./src/index.ts) (~200 LOC) to see what is happening up close.
-
-### Run Examples
-
-There are two example scripts. One is interactive, meaning after the example runs a REPL is started with global variables available to operate the replication manually.
-
-The scripts are `npm run example` and `npm run interactive`.
 
 ## Read and Write Steps
 
