@@ -9,11 +9,15 @@ export async function DynamicContent
   Promise<{ id: CID, block: BlockView }>
 {
   const block = await Block.encode({ value: { protocol, param }, codec, hasher })
-  const hash = await hasher.encode(block.cid.multihash.digest)
+  const dynamic = new TextEncoder().encode('dynamic')
+  const bytes = new Uint8Array(dynamic.length + block.cid.multihash.digest.length)
+  bytes.set(dynamic)
+  bytes.set(block.cid.multihash.digest, dynamic.length)
+
   const cid = CID.create(
     block.cid.version,
     block.cid.code,
-    await hasher.digest(block.cid.multihash.digest)
+    await hasher.digest(bytes)
   )
 
   return { id: cid, block }
