@@ -1,7 +1,7 @@
-# Dynamic-Content IDs on IPFS
+# Hosting Dynamic Content on IPFS
 
-## Abstract
+Model dynamic content on IPFS by combining IPLD, IPNS, and Provider Records.
 
-### Article: [./ARTICLE.md](./ARTICLE.md)
+Read the article: [ARTICLE.md](./ARTICLE.md)
 
-### Example: [./EXAMPLE.md](./EXAMPLE.md)
+Try out the example: [EXAMPLE.md](./EXAMPLE.md)
