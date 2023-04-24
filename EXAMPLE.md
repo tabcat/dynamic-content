@@ -12,6 +12,8 @@ There are two example scripts. One is interactive, meaning after the example run
 
 The scripts are `npm run example` and `npm run interactive`.
 
+**If something is not working please open an [issue](https://github.com/tabcat/dynamic-content/issues)!**
+
 ## What is the example doing?
 
 The example consists of 2 clients and a server.
