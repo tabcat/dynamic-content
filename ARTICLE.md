@@ -1,160 +1,67 @@
+# Hosting Dynamic Content on IPFS
 
-# Hosting Dynamic End-user apps on IPFS
+The InterPlanetary File System (IPFS) is a distributed, peer-to-peer file system designed to make the web faster, safer, and more resilient. Although IPFS excels at hosting static content, hosting dynamic content remains a challenge. This article presents a design for hosting dynamic content on IPFS using InterPlanetary Linked Data (IPLD), InterPlanetary Name Service (IPNS), and Provider Records.
 
-There are a few issues using a purely peer-to-peer apps on end-user devices.
-The issues have to do with end-user devices often not being reliable peers.
-This can result in application data being trapped on user devices.
+## Understanding Key Components
 
-This article presents a general design for keeping dynamic\* content available on IPFS.
+### IPLD
 
-## Data Availability
+IPLD is a data model and set of protocols for linking and addressing data across various distributed systems. In IPFS, IPLD is used to store immutable data, providing content-addressed storage. Each piece of data stored in IPLD has a unique Content Identifier (CID) derived from its content, ensuring data integrity.
 
-Dynamic-content, especially in a peer-to-peer setting, is a logical data structure made up of immutable data on separate machines.
+### IPNS
 
-Creating immutable and mutable content with IPLD and IPNS is simple.
-Continuing to host that content is less simple as it involves keeping machines online.
-Fortunately tools and services which make this part easier do exist.
+IPNS is a decentralized naming system that allows you to create a mutable reference to an immutable CID. With IPNS, you can create a persistent address that always points to the latest version of your content, even as it changes over time.
 
+### Provider Records
 
+Provider Records are a fundamental part of IPFS's Distributed Hash Table (DHT). They help users locate peers who store specific content, identified by its CID. When a user requests content, the DHT is queried for the Provider Records associated with the requested CID. These records contain information about the peers who have the content, enabling the user to establish a connection and retrieve the data.
 
-Data needs to remain available for it to be useful to other machines.
+## Achieving Dynamicity
 
-Dynamic content is often made of immutable data.
-Dynamic content is often kept available by a large network of peers all storing copies of the data.
-Protocol peers, sharing the same parameters, gossip transactions and read the latest state from their local copies.
+Combining these three components enables dynamic content hosting on IPFS. The final component involves using Provider Records for dynamic content in a similar way to how they are used for static content. Instead of pointing to peerIDs of potentially online IPFS nodes, they point to peerIDs being used as IPNS names. So, when querying the DHT for providers of dynamic content, the returned providers are IPNS names. These IPNS names then point to the CID of the latest version of a device's local replica.
 
-Dynamic content can be made of immutable data.
-But without an identifier there is no way to reference it or find it on the DHT
+In distributed systems, dynamic content is often logical, composed of the local replicas of multiple machines and rules about read/write operations. The design encodes this model into IPFS: Query DHT for collaborators' IPNS -> Resolve IPNS to CIDs of remote replica -> Query DHT for providers of the remote replica CID -> Fetch, traverse, and merge remote replica with local replica.
 
-Often dynamic content, in a p2p setting, is kept available by a large network of peers all storing the same data.
+### Dynamic-Content IDs
 
+When searching for static content, a CID is used to find providers in the DHT. When searching for dynamic content a CID is still used. However this CID does not belong to any static content. Instead it is created by permutating the CID of a manifest document describing the dynamic content:
 
-Pinning services will "pin" (host) IPLD/IPNS data/records for users.
-They are a simple and convenient way for users to keep content available over IPFS.
+```
+manifest = { protocol: '/some-protocol/1.0.0', params: { network: 1 } }
+cid = toCID(manifest)
+dcid = toCID('dynamic' + cid)
+```
 
-Often 
+### Example
 
-## Dynamic vs Mutable Content
+Check out the code example.
+It shows how everything works together.
 
-Dynamic and mutable content are both content that can change.
-However for the purpose of this article, dynamic content can safely be changed by one to many peers.
+## Usecase: Edge-computed Applications
 
-An IPNS Record is an example of mutable content.
-It's value can be changed but it’s not safe for peers publish changes without coordinating outside of the protocol.
+This design may be especially useful with local-first databases.
+These databases are sharded/partitioned to the interested parties.
+It's common for only a few collaborators to be a part of a database, and there may be long periods without any of them online.
+This presents a challenge of availability and ability to build upon history of peers.
+A challenge this design can potentially solve.
 
-Peer-to-peer databases and blockchains are examples of dynamic content.
-These can safely be changed over time by multiple peers creating [concurrent] transactions.
+### Client-side Processing
 
-## Replicas of Dynamic Content
+Handles the application logic. 
+commands pinning servers to keep the latest history of the application available to collaborators.
+handles merging replicas from other collaborators.
 
-## Storing Replicas in IPLD
+### Pinning Servers
 
-## Publishing updated Replicas to IPNS
+reliable servers keeping dynamic content available by pinning IPLD and refreshing IPNS/Signed Provider Records for clients.
+they run no application-specific code.
+requires delegated republishing of IPNS and Provider Records to the DHT.
+using UCANs to delegate this is being talked about but work around this is further off.
+until then the client must come online to refresh the records before they disappear (usually after 40hours).
 
-## Dynamic-Content IDs on IPFS
+### Replication
 
-Content IDs (aka CIDs) are used to key immutable content on the IPFS-DHT. 
-Dynamic-Content IDs would be used to key dynamic content.
-
-### Provider Records for Dynamic Content
-
-## Overview of complete System
-
-## Edge-computed Applications
-
-The point of this design is to allow for dynamic p2p applications that need 0 reliable peers.
-
-Although there is a small caveat
-still need to be online before leaving to replicate data
-
-## Open Questions
-
-
-
-
-
-
-An example of dynamic content in this context would be a peer-to-peer database like OrbitDB or a blockchain like *your fave chain here*.
-
-## Provider Records for Dynamic Content
-
-## Off-loading Availability
-
-### Algorithm
-
-## Examining Use-Cases
-
-### Edge Computed Applications
-
-## Code Example
-
-## 
-
-
-
-# Availability layer for Dynamic Content on IPFS
-
-There are a few issues using a pure peer-to-peer model for apps on edge devices.
-These issues have to do with edge devices often not being reliable peers.
-This can result in significant pieces of application data being trapped offline.
-
-This article presents a general design for keeping dynamic content available on IPFS.
-
-## Dynamic Content vs Mutable Content
-
-Dynamic and mutable content are both content that can change.
-However for the purpose of this article, *dynamic* content can safely be changed by multiple peers.
-
-An IPNS Record is an example of mutable content.
-It can be changed but it's not safe for peers to update the content without first coordinating.
-
-An example of dynamic content in this context would be a peer-to-peer database like OrbitDB or a blockchain like *\*your fave chain here\**.
-
-## Provider Records for Dynamic Content
-
-On the IPFS DHT, Provider Records are used to resolve the providers for a piece of immutable content.
-They tie a multihash to a list of multiaddrs.
-
-A provider record for dynamic content would work similarly.
-The difference is that it would tie a logical id to a list of IPNS keys.
-
-OrbitDB uses an immutable document called a manifest to refer to a database.
-The manifest contains config that keeps it logically unique from other databases.
-The logical id for the database inside the DHT would be some deterministic permutation of the manifest CID.
-
-## Back to Availability/Uptime
-
-How does this solve uptime issues for end users of p2p consumer-facing applications?
-Why not simply add reliable peers running the same software to the system?
-
-Adding reliable peers would definitely work.
-However it requires running more niche software.
-It's likely more than a few protocols will be used for dynamic content on IPFS.
-
-End users keeping their dynamic content available may be solved more generally:
-
-Each application peer manages it's local replica of the dynamic content.
-The replica is made up of immutable IPLD blocks.
-Assume replicas are structured to have a single root CID.
-Each local replica has an associated and unique IPNS Key.
-A logical id is derived from the parameters used for the dynamic content.
-
-When an application peer comes online it looks for other online peers.
-If no other peers are online it queries the DHT for the dynamic content Provider Record.
-After a peer updates it's local replica it gets a new root CID.
-New root CIDs are published in IPNS Revisions.
-Before a peer goes offline it publishes a dynamic content Provider Record.
-
-IPFS nodes with IPLD/IPNS pinning services are used to keep content available after the peer has gone offline.
-
-In the future it could make sense to have the pinning services also republish signed DHT records.
-This would enable dynamic content to survive periods without any peers online for >48hrs.
-
-This design should be easier to self-host and can lever much of existing infrastructure.
-
-## Edge-Computed Application
-
-The point of this design is to allow for dynamic p2p applications that need 0 reliable peers.
-Unreliable user devices are computing all of the application logic and ordering reliable IPLD/IPNS pinners to keep the data available.
-*A human wrote this article*
-
+Not good to use this as main replication method.
+Use this general way for asynchronous replication of dynamic content with pinning servers and offline collaborators.
+only requires publishing provider records when needed to refresh them. and republishing IPNS every few minutes after making changes.
+Use more specialized protocols for synchronous replication with online collaborators.
