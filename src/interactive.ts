@@ -1,12 +1,12 @@
 import repl from 'repl'
 await import('./index.js')
 
-console.log('--- interactive example ---')
+console.log(`
+--- interactive example ---
+`)
 
 await connect(client1)
-console.log('client1: online')
 await connect(client2)
-console.log('client2: online')
 
 global.help = 
 `

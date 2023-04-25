@@ -29,45 +29,22 @@ import './globals.js'
 import { createHeliaNode } from './create-helia.js'
 import { DynamicContent } from './dynamic-content.js'
 
-const client1 = await createHeliaNode({
-  dht: kadDHT({
-    validators: {
-      ipns: ipnsValidator
-    },
-    selectors: {
-      ipns: ipnsSelector
-    },
-    clientMode: true
-  }),
-})
-
-const client2 = await createHeliaNode({
-  dht: kadDHT({
-    validators: {
-      ipns: ipnsValidator
-    },
-    selectors: {
-      ipns: ipnsSelector
-    },
-    clientMode: true
+const createKadDht = (clientMode: boolean) =>
+  kadDHT({
+    validators: { ipns: ipnsValidator },
+    selectors: { ipns: ipnsSelector },
+    clientMode
   })
-})
 
-const server = await createHeliaNode({
-  dht: kadDHT({
-    validators: {
-      ipns: ipnsValidator
-    },
-    selectors: {
-      ipns: ipnsSelector
-    }
-  })
-})
-console.log('server is pinning ipld/ipns and serving dht records')
+const client1 = await createHeliaNode({ dht: createKadDht(true) })
+const client2 = await createHeliaNode({ dht: createKadDht(true) })
+const server = await createHeliaNode({ dht: createKadDht(false )})
+console.log('server is pinning ipld and serving dht ipns and provider records')
 
 const name1 = await ipns(client1, [dht(client1)])
 const name2 = await ipns(client2, [dht(client2)])
 
+// manifest document describes the dynamic content
 const dynamicContent = await DynamicContent({
   protocol: '/dynamic-content-example/set/1.0.0',
   param: { network: 1 }
@@ -87,9 +64,9 @@ const query = (client: Helia) => async () => {
   }
 
   if (i > 0) {
+    // the first query after dialing the protocol often returns an empty response
     console.log('dht query returned empty response')
   }
-
   if (i === 3) {
     throw new Error('cannot find providers')
   }
@@ -131,6 +108,7 @@ const update = async (...values: string[]) => {
   const diff = Array.from(values).filter(value => !set1.has(value))
   for (const value of values) { set1.add(value) }
   console.log(`client1: added new values to set { ${diff.join(', ')} }`)
+  console.log(`client1: set state: { ${Array.from(set1).join(', ')} }`)
   const block = await encode(set1)
   console.log(`client1: encoded to raw data`)
   await push(block)
@@ -153,37 +131,46 @@ const sync = async () => {
   const diff = Array.from(set1).filter(value => !set2.has(value))
   merge(set2, set1)
   console.log(`client2: added new values to set { ${diff.join(', ')} }`)
+  console.log(`client2: set state: { ${Array.from(set2).join(', ')} }`)
 }
 
-const connect = async (client: Helia) => { await client.libp2p.dialProtocol((server.libp2p.getMultiaddrs())[0], '/ipfs/lan/kad/1.0.0') }
-const disconnect = async (client: Helia) => await client.libp2p.getConnections().forEach(connection => connection.close())
+const getClientName = (client: Helia) => client === client1 ? 'client1' : 'client2'
+const connect = async (client: Helia) => {
+  await client.libp2p.dialProtocol((server.libp2p.getMultiaddrs())[0], '/ipfs/lan/kad/1.0.0')
+  console.log('%s: online', getClientName(client))
+}
+const disconnect = async (client: Helia) => {
+  await client.libp2p.getConnections().forEach(connection => connection.close())
+  console.log('%s: offline', getClientName(client))
+}
 
-// client1 makes changes and goes offline
+// client1 comes online, makes changes, and goes offline
 {
-  // online
   await connect(client1)
-  console.log('client1: online')
-
   await update('nerf this')
-  console.log('client1: updated the set')
-
   await disconnect(client1)
-  console.log('client1: offline')
 }
 
-console.log('--- no peers online, Zzzzz ---')
+console.log(`
+--- no peers online, Zzzzz ---
+`)
 await new Promise(resolve => setTimeout(resolve, 3000))
 
-// client2 comes online and merges changes
+// client2 comes online, merges changes, and goes offline
 {
   await connect(client2)
-  console.log('client2: online')
-
   await sync()
-  console.log('client2: synced the updates')
-
   await disconnect(client2)
-  console.log('client2: offline')
+}
+
+// non-interactive example
+if (process.argv[1].endsWith('dynamic-content/dist/index.js')) {
+  await Promise.all([
+    client1.stop(),
+    client2.stop(),
+    server.stop()
+  ])
+  await process.exit(0)
 }
 
 global.client1 = client1
