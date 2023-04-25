@@ -57,7 +57,7 @@ const advertise = (client: Helia) => async () => await all(client.libp2p.dht.pro
 const query = (client: Helia) => async () => {
   let i = 0
   let providers: ProviderEvent[] = []
-  while (providers.length === 0 && i < 3) {
+  while (providers.length === 0 && i <3 /* u */) {
     const responses = await all(client.libp2p.dht.findProviders(dynamicContent.id))
     providers = responses.filter(r => r.name === 'PROVIDER') as ProviderEvent[]
     i++
