@@ -6,19 +6,19 @@ The InterPlanetary File System (IPFS) is a distributed, peer-to-peer file system
 
 ### IPLD
 
-IPLD is a data model for linking and addressing data across distributed systems. In IPFS, IPLD stores immutable data, providing content-addressed storage. Data stored in IPLD has a unique Content Identifier (CID) derived from its content, ensuring data integrity.
+[IPLD](https://ipld.io/) is a data model for linking and addressing data across distributed systems. In IPFS, IPLD stores immutable data, providing [content-addressed storage](https://en.wikipedia.org/wiki/Content-addressable_storage). Data stored in IPLD has a unique [Content Identifier](https://docs.ipfs.tech/concepts/content-addressing/) (CID) derived from its content, ensuring data integrity.
 
 ### IPNS
 
-IPNS is a decentralized naming system that allows you to create a mutable reference to an immutable CID. With IPNS, you can create a persistent address that always points to the latest version of your content, even as it changes over time.
+[IPNS](https://docs.ipfs.tech/concepts/ipns/) is a decentralized naming system that allows you to create a mutable reference to an immutable CID. With IPNS, you can create a persistent address that always points to the latest version of your content, even as it changes over time.
 
 ### PeerID
 
-A Libp2p peerID is a unique identifier for each node in the network, derived from a public key. PeerIDs help find, identify, and communicate with other nodes.
+A [Libp2p peerID](https://docs.libp2p.io/concepts/fundamentals/peers/#peer-id) is a unique identifier for each node in the network, derived from a [public key](https://en.wikipedia.org/wiki/Public-key_cryptography). PeerIDs help find, identify, and communicate with other nodes.
 
 ### Provider Records
 
-Provider Records are a fundamental part of IPFS's Distributed Hash Table (DHT). When requesting IPFS content, a node queries the DHT for Provider Records associated with the requested CID. These records contain the PeerID of peers with the content, enabling the user to establish a connection and retrieve the data.
+[Provider Records](https://docs.ipfs.tech/concepts/dht/) are a fundamental part of IPFS's Distributed Hash Table (DHT). When requesting IPFS content, a node queries the DHT for Provider Records associated with the requested CID. These records contain the PeerID of peers with the content, enabling the user to establish a connection and retrieve the data.
 
 ---
 > **It's important to note that IPNS names can be derived from PeerIDs**
@@ -27,13 +27,16 @@ Provider Records are a fundamental part of IPFS's Distributed Hash Table (DHT). 
 ## Achieving Dynamicity
 
 The main contribution is the novel use of Provider Records.
-Instead of pointing from a CID to peerIDs of nodes hosting that content, they point from a Dynamic-Content ID to IPNS names.
+Instead of pointing from a CID to peerIDs of nodes hosting that content, they are used to point from a Dynamic-Content ID to IPNS names.
 The resulting IPNS names each resolve to the latest CID of a device's local replica.
 
 A device can query the provider records for dynamic content, then read from the remote replicas and merge them locally. All of this can happen without knowing any previous collaborators, or needing them to be online as long as their replica data is kept available via a pinner.
 
+
+<img src="https://raw.githubusercontent.com/tabcat/dynamic-content/master/.assets/dynamic-content-diagram.png" width="333">
+
 ---
-> Without the Merkle-DAG structure of IPFS, this would not be possible because it enables traversing just the necessary pieces of content.
+> The Merkle-DAG structure of IPFS enables traversing only the necessary pieces of content.
 ---
 
 ### Dynamic-Content IDs
@@ -62,7 +65,7 @@ The design presented in this article works similarly but replaces pubsub with Pr
 - IPNS to point to the latest version of a replica
 
 ---
-> Titling this article 'Replication on IPFS' might have been more accurate, but 'Hosting Dynamic Content on IPFS' sounded way better.
+> Titling this article 'Replication on IPFS' might have been more accurate, but 'Hosting Dynamic Content on IPFS' sounded waaay better.
 ---
 
 ## Use-case: Edge-computed Applications
@@ -95,11 +98,11 @@ After committing changes to the local replica, periodically push updates to pinn
 It should be clear now that using Provider Records this way was not intented.
 Which brings us to the roadblock...
 
-DHT servers validate that the peerIDs inside received Provider Records match the peerID of the node adding them.
+[DHT servers validate that the peerIDs inside received Provider Records match the peerID of the node adding them.](https://github.com/libp2p/specs/tree/master/kad-dht#rpc-messages)
 
 This check makes adding Provider Records for multiple peerIDs to the DHT difficult.
-Not great if you want to participate in multiple pieces of dynamic content as each one requires its own IPNS name.
-The workaround, for now, will involve spinning up ephemeral libp2p nodes to add each IPNS name as a provider every ~20hours.
+Not great if you want to participate in multiple pieces of dynamic content as each will require its own IPNS name.
+The workaround, for now, will involve spinning up ephemeral libp2p nodes to add each IPNS name as a provider every [22hours](https://github.com/libp2p/specs/tree/master/kad-dht#content-provider-advertisement-and-discovery).
 
 Hopefully, in the future, it will be possible to delegate keeping Provider and IPNS records fresh to pinning servers.
 This feature is needed for the full implementation of the edge-computed applications use-case and is not yet possible.
