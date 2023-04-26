@@ -51,7 +51,7 @@ dcid = toCID('dynamic' + cid)
 
 ### Example
 
-Check out the code [example](./EXAMPLE.md).
+Check out the code [example](https://github.com/tabcat/dynamic-content/blob/master/EXAMPLE.md).
 It shows how everything works together.
 
 ## Viewed as a Replication Protocol
