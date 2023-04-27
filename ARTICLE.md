@@ -65,6 +65,8 @@ The design presented in this article works similarly but replaces pubsub with Pr
 - IPNS to point to the latest version of a replica
 
 ---
+> Swapping pubsub for ~persistent components makes building on history without any collaborators online possible.
+
 > Titling this article 'Replication on IPFS' might have been more accurate, but 'Hosting Dynamic Content on IPFS' sounded waaay better.
 ---
 
@@ -90,8 +92,12 @@ This context makes it challenging to build upon the history of collaborators, a 
 ### Replication
 
 When other collaborators are online, use an application-specific replication protocol for real-time collaboration.
-If not, query the DHT for collaborators' IPNS names to fetch and merge replicas from pinning servers. 
+If not, query the DHT for collaborators' IPNS names to fetch and merge replicas from pinning servers.
 After committing changes to the local replica, periodically push updates to pinning servers and refresh the IPNS to reference the new root.
+
+---
+> Pinning servers in this context provide a reliable replication layer to fallback to when no other collaborators are online.
+---
 
 ## Roadblock, Workaround, and Hopeful Future
 
