@@ -17,7 +17,6 @@
     "@helia/ipns": "^1.1.0",
     "@ipld/dag-cbor": "^9.0.0",
     "@libp2p/kad-dht": "^8.0.6",
-    "@libp2p/mdns": "^7.0.3",
     "@libp2p/tcp": "^6.1.5",
     "helia": "^1.0.3",
     "libp2p": "^0.44.0",

@@ -1,7 +1,6 @@
 import { createHelia } from 'helia'
 import { createLibp2p, Libp2p, Libp2pOptions } from 'libp2p'
 import { kadDHT } from '@libp2p/kad-dht'
-import { mdns } from '@libp2p/mdns'
 import { tcp } from '@libp2p/tcp'
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
