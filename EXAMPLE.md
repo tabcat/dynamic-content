@@ -44,14 +44,16 @@ Describes the process of read/write dynamic content to IPFS:
 #### Writing
 
 1. Make changes to local replica
-2. Republish IPNS to point to new CID root
-3. Add IPNS key as a provider of the Dynamic Content's ID
+2. Push replica data to IPLD pinner
+3. Republish IPNS to point to new CID root
+4. Add IPNS key as a provider of the Dynamic Content's ID
 
 #### Reading
 
 1. Query the DHT for Providers of the Dynamic Content's ID
 2. Resolve providers IPNS keys to CIDs
-3. Merge changes with local replica
+3. Resolve CIDs to IPLD data
+4. Merge changes with local replica
 
 ---
 > **Note: in practice the DHT queries related to the Dynamic Content's ID just need to be ran on init, and then switch to a protocol meant for real-time replication with online collaborators.**
