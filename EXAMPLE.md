@@ -25,26 +25,16 @@ The `server ` represents a reliable machine used as a
 The clients are unreliable machines used to read and write dynamic content.
 In the example `client1` does all the writing and `client2` does all the reading.
 
-The example is scripted like so:
+<img src="https://github.com/tabcat/dynamic-content/blob/master/.assets/example-mermaid-diag.svg" width="777">
 
-```
-client1 comes online
-client1 writes to the dynamic content
-client1 goes offline
-
-client2 comes online
-client2 reads and syncs the dynamic content
-client2 goes offline
-```
-
-<img src=".assets/example-mermaid-diag.svg" width="777">
+<br/>
 
 Obviously this is a very high overview of what's going on.
 Important to remember only IPLD/IPNS/Provider Records are being used.
 It's a good idea to read [index.ts](./src/index.ts) (~200 LOC) to see what is happening up close.
 
 ---
-> Reminder: 3 helia (ipfs) nodes are being created in memory by a single script.
+> Note: client1, client2, and server are all in memory helia nodes created by a single script.
 ---
 
 ## Read and Write Steps
