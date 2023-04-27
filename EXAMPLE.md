@@ -1,8 +1,21 @@
 # Example
 
 This example shows replication of dynamic content using IPLD, IPNS, and Provider Records.
-It connects 2 clients with a server over TCP. 
+There are 3 [helia](https://github.com/ipfs/helia) (ipfs) nodes running in a single script, named `client1`, `client2`, and `server`.
+Libp2p is used by `client1` and `client2` to dial `server` and use the `/ipfs/kad/1.0.0` protocol.
+This allows clients to add IPNS and Provider records to the DHT server.
+Clients add IPLD data to `server` programmatically.
 
+```mermaid
+flowchart LR
+    A[client1] & B[client2] ---->|tcp\n/ipfs/kad/1.0.0| C[server]
+```
+
+---
+> **`client1`, `client2`, and `server ` are all in memory helia nodes created by a single script.**
+
+> **IPLD data is added to the server by clients by accessing `server.blockstore.put` from within the script. As opposed to using an HTTP API like in any real usecase.**
+---
 
 ## Usage
 
@@ -20,13 +33,15 @@ The scripts are `npm run example` and `npm run interactive`.
 
 **If something is not working please open an [issue](https://github.com/tabcat/dynamic-content/issues)!**
 
-## What is the example doing?
+## What's Happening?
 
-The example consists 3 [helia](https://github.com/ipfs/helia) nodes: 2 clients and a server.
+The example consists 3 [helia](https://github.com/ipfs/helia) nodes, named `client1`, `client2`, and `server`.
 The `server` represents a reliable machine used as a
 
 1. IPLD pinning server
 2. DHT server
+
+> IPNS and Provider records are both stored in the DHT.
 
 The clients are unreliable machines used to read and write dynamic content.
 In the example `client1` does all the writing and `client2` does all the reading.
@@ -52,10 +67,6 @@ sequenceDiagram
 Obviously this is a very high overview of what's going on.
 Important to remember only IPLD/IPNS/Provider Records are being used.
 It's a good idea to read [index.ts](./src/index.ts) (~200 LOC) to see what is happening up close.
-
----
-> **Note: client1, client2, and server are all in memory helia nodes created by a single script.**
----
 
 ## Read and Write Steps
 
