@@ -24,9 +24,14 @@ const createKadDht = (clientMode: boolean) =>
     clientMode
   })
 
-const client1 = await createHeliaNode({ dht: createKadDht(true) })
-const client2 = await createHeliaNode({ dht: createKadDht(true) })
-const server = await createHeliaNode({ dht: createKadDht(false) })
+const createLibp2pConfig = (clientMode: boolean) => ({
+  dht: createKadDht(clientMode), // kademlia dht instance
+  connectionManager: { minConnections: 0 } // disable autodial
+})
+
+const client1 = await createHeliaNode(createLibp2pConfig(true))
+const client2 = await createHeliaNode(createLibp2pConfig(true))
+const server = await createHeliaNode(createLibp2pConfig(false))
 console.log('server is pinning ipld and serving dht ipns and provider records')
 
 const name1 = await ipns(client1, [dht(client1)])
