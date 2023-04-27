@@ -37,7 +37,7 @@ client2 reads and syncs the dynamic content
 client2 goes offline
 ```
 
-<img src=".assets/example-mermaid-diag.png" width="777">
+<img src=".assets/example-mermaid-diag.svg" width="777">
 
 Obviously this is a very high overview of what's going on.
 Important to remember only IPLD/IPNS/Provider Records are being used.
