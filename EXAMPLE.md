@@ -1,8 +1,12 @@
 # Example
 
+This example shows replication of dynamic content using IPLD, IPNS, and Provider Records.
+It connects 2 clients with a server over TCP. 
+
+
 ## Usage
 
-Requires npm and nodev18
+- Requires [npm and Node v18](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 ### Install Packages
 
@@ -27,7 +31,21 @@ The `server` represents a reliable machine used as a
 The clients are unreliable machines used to read and write dynamic content.
 In the example `client1` does all the writing and `client2` does all the reading.
 
-<img src="https://github.com/tabcat/dynamic-content/blob/master/.assets/example-mermaid-diag.svg" width="777">
+```mermaid
+sequenceDiagram
+    client1->>client1: update replica
+    client1->>server: push replica data
+    client1->>server: IPNS publish replica CID
+    client1->>server: add IPNS as provider of DCID
+
+    client2->>server: find providers for DCID
+    server-->>client2: client1 is provider
+    client2->>server: resolve client1 IPNS
+    server-->>client2: resolves to CID
+    client2->>server: resolve CID to data
+    server-->>client2: data
+    client2->>client2: merge replica
+```
 
 <br/>
 
