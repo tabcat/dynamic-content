@@ -1,0 +1,13 @@
+sequenceDiagram
+    client1->>client1: update replica
+    client1->>server: push replica data
+    client1->>server: IPNS publish replica CID
+    client1->>server: add IPNS as provider of DCID
+
+    client2->>server: find providers for DCID
+    server-->>client2: client1 is provider
+    client2->>server: resolve client1 IPNS
+    server-->>client2: resolves to CID
+    client2->>server: resolve CID to data
+    server-->>client2: data
+    client2->>client2: merge replica
