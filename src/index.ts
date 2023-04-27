@@ -26,7 +26,7 @@ const createKadDht = (clientMode: boolean) =>
 
 const client1 = await createHeliaNode({ dht: createKadDht(true) })
 const client2 = await createHeliaNode({ dht: createKadDht(true) })
-const server = await createHeliaNode({ dht: createKadDht(false)})
+const server = await createHeliaNode({ dht: createKadDht(false) })
 console.log('server is pinning ipld and serving dht ipns and provider records')
 
 const name1 = await ipns(client1, [dht(client1)])
@@ -142,6 +142,7 @@ const disconnect = async (client: Helia) => {
 console.log(`
 --- no peers online, Zzzzz ---
 `)
+
 await new Promise(resolve => setTimeout(resolve, 3000))
 
 // client2 comes online, merges changes, and goes offline
