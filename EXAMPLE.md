@@ -1,3 +1,6 @@
+### USES HELIA!!!! AND DHT IN JAVASCRIPT!!
+---
+
 # Example
 
 This example shows replication of dynamic content using IPLD, IPNS, and Provider Records.
