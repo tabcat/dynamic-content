@@ -17,7 +17,7 @@ The scripts are `npm run example` and `npm run interactive`.
 ## What is the example doing?
 
 The example consists 3 [helia](https://github.com/ipfs/helia) nodes: 2 clients and a server.
-The `server ` represents a reliable machine used as a
+The `server` represents a reliable machine used as a
 
 1. IPLD pinning server
 2. DHT server
