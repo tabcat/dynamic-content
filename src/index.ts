@@ -1,5 +1,3 @@
-import { createHelia } from 'helia'
-import { createLibp2p, Libp2p, Libp2pOptions } from 'libp2p'
 import { kadDHT } from '@libp2p/kad-dht'
 import { ipns, IPNS } from '@helia/ipns'
 import { dht } from '@helia/ipns/routing'
@@ -7,7 +5,6 @@ import { ipnsValidator } from 'ipns/validator'
 import { ipnsSelector } from 'ipns/selector'
 import { CID } from 'multiformats/cid'
 import * as Block from 'multiformats/block'
-import { Block as BlockType } from 'multiformats/interface'
 import * as codec from '@ipld/dag-cbor'
 import { sha256 as hasher } from 'multiformats/hashes/sha2'
 import all from 'it-all'
@@ -97,7 +94,7 @@ const set2: Set<string> = new Set()
 // write to client1
 const update = async (...values: string[]) => {
   const diff = Array.from(values).filter(value => !set1.has(value))
-  for (const value of values) { set1.add(value) }
+  for (const value of values) { add(set1)(value) }
   console.log(`client1: added new values to set { ${diff.join(', ')} }`)
   console.log(`client1: set state: { ${Array.from(set1).join(', ')} }`)
   const block = await encode(set1)
