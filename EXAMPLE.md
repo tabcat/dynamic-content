@@ -16,7 +16,7 @@ The scripts are `npm run example` and `npm run interactive`.
 
 ## What is the example doing?
 
-The example consists of 2 clients and a server.
+The example consists 3 [helia](https://github.com/ipfs/helia) nodes: 2 clients and a server.
 The `server ` represents a reliable machine used as a
 
 1. IPLD pinning server
@@ -37,9 +37,15 @@ client2 reads and syncs the dynamic content
 client2 goes offline
 ```
 
+<img src=".assets/example-mermaid-diag.png" width="777">
+
 Obviously this is a very high overview of what's going on.
 Important to remember only IPLD/IPNS/Provider Records are being used.
 It's a good idea to read [index.ts](./src/index.ts) (~200 LOC) to see what is happening up close.
+
+---
+> Reminder: 3 helia (ipfs) nodes are being created in memory by a single script.
+---
 
 ## Read and Write Steps
 
