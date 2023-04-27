@@ -11,7 +11,6 @@
   "author": "tabcat <tabcat00@proton.me>",
   "license": "MIT",
   "dependencies": {
-    "@chainsafe/libp2p-gossipsub": "^6.2.0",
     "@chainsafe/libp2p-noise": "^11.0.4",
     "@chainsafe/libp2p-yamux": "^3.0.7",
     "@helia/ipns": "^1.1.0",
