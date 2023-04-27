@@ -2,6 +2,8 @@
 
 ## Usage
 
+Requires npm and nodev18
+
 ### Install Packages
 
 `npm install`
