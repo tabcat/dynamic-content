@@ -34,7 +34,7 @@ Important to remember only IPLD/IPNS/Provider Records are being used.
 It's a good idea to read [index.ts](./src/index.ts) (~200 LOC) to see what is happening up close.
 
 ---
-> Note: client1, client2, and server are all in memory helia nodes created by a single script.
+> **Note: client1, client2, and server are all in memory helia nodes created by a single script.**
 ---
 
 ## Read and Write Steps
@@ -53,4 +53,6 @@ Describes the process of read/write dynamic content to IPFS:
 2. Resolve providers IPNS keys to CIDs
 3. Merge changes with local replica
 
-Note: in practice the DHT queries related to the Dynamic Content's ID just need to be ran to init, and then switch to a protocol meant for synchronous replication with online collaborators.
+---
+> **Note: in practice the DHT queries related to the Dynamic Content's ID just need to be ran on init, and then switch to a protocol meant for real-time replication with online collaborators.**
+---

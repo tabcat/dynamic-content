@@ -36,7 +36,7 @@ A device can query the provider records for dynamic content, then read from the 
 <img src="https://raw.githubusercontent.com/tabcat/dynamic-content/master/.assets/dynamic-content-diagram.png" width="333">
 
 ---
-> The Merkle-DAG structure of IPFS enables traversing only the necessary pieces of content.
+> **The Merkle-DAG structure of IPFS enables traversing only the necessary pieces of content.**
 ---
 
 ### Dynamic-Content IDs
@@ -65,9 +65,9 @@ The design presented in this article works similarly but replaces pubsub with Pr
 - IPNS to point to the latest version of a replica
 
 ---
-> Swapping pubsub for ~persistent components makes building on history without any collaborators online possible.
+> **Swapping pubsub for ~persistent components makes building on history without any collaborators online possible.**
 
-> Titling this article 'Replication on IPFS' might have been more accurate, but 'Hosting Dynamic Content on IPFS' sounded waaay better.
+> **Titling this article 'Replication on IPFS' might have been more accurate, but 'Hosting Dynamic Content on IPFS' sounded waaay better.**
 ---
 
 ## Use-case: Edge-computed Applications
@@ -96,7 +96,7 @@ If not, query the DHT for collaborators' IPNS names to fetch and merge replicas 
 After committing changes to the local replica, periodically push updates to pinning servers and refresh the IPNS to reference the new root.
 
 ---
-> Pinning servers in this context provide a reliable replication layer to fallback to when no other collaborators are online.
+> **Pinning servers in this context provide a reliable replication layer to fallback to when no other collaborators are online.**
 ---
 
 ## Roadblock, Workaround, and Hopeful Future
