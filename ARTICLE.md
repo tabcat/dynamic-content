@@ -116,5 +116,7 @@ This feature is needed for the full implementation of the edge-computed applicat
 ## Get Involved
 
 Sound interesting? Get involved! Come [chat](https://matrix.to/#/#hldb:matrix.org)!
-[I](https://github.com/tabcat)'m working on this in [hldb/welo](https://github.com/hldb/welo).
 
+Have a question? Create an [issue](https://github.com/tabcat/dynamic-content/issues)!
+
+[I](https://github.com/tabcat)'m working on this in [hldb/welo](https://github.com/hldb/welo).
