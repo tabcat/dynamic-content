@@ -96,7 +96,7 @@ If not, query the DHT for collaborators' IPNS names to fetch and merge replicas 
 After committing changes to the local replica, periodically push updates to pinning servers and refresh the IPNS to reference the new root.
 
 ---
-> **Pinning servers in this context provide a reliable replication layer to fallback to when no other collaborators are online.**
+> **Pinning servers in this context provide a general and reliable replication layer to fallback to when no other collaborators are online.**
 ---
 
 ## Roadblock, Workaround, and Hopeful Future
