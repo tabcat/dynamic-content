@@ -234,4 +234,14 @@ Have a question? Create an [issue](https://github.com/tabcat/dynamic-content/iss
 
 **A**: IPNS names are not built to handle concurrent writes and should not be extended to do so. They are versioned documents that one device should be able to update. As shown here they are extremely useful for creating a system that can handle concurrent writes.
 
+<br/>
 
+**Q**: Isn't this going to be slow?
+
+**A**: This design is meant to complement real-time replication by providing a general and reliable layer to fallback to. It adds two steps on top of resolving a CID, the DHT provider query, and the IPNS name resolutions.
+
+<br/>
+
+**Q**: 
+
+**A**: 
