@@ -36,7 +36,7 @@ A device can query the provider records for dynamic content, then read from the 
 <img src="https://raw.githubusercontent.com/tabcat/dynamic-content/master/.assets/dynamic-content-diagram.png" width="333">
 
 ---
-> **The Merkle-DAG structure of IPFS enables traversing only the necessary pieces of content.**
+> **The Merkle-DAG structure of IPFS enables traversing only the necessary pieces of content. Without this property, replication over the immutable data would not be realistic.**
 ---
 
 ### Dynamic-Content IDs
