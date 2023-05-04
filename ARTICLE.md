@@ -49,7 +49,7 @@ All of this can happen without knowing any previous collaborators, or needing th
 
 When searching the network for static content, a CID is used to find providers in the DHT. When searching for dynamic content a CID is still used. However, this CID does not belong to any static content. Instead, it is a permutation of the CID of an immutable manifest document that describes the dynamic content:
 
-```
+```js
 manifest = { protocol: '/some-protocol/1.0.0', params: { network: 1 } }
 cid = toCID(manifest)
 dcid = toCID('dynamic' + cid)
