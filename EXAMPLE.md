@@ -1,7 +1,8 @@
-### USES HELIA!!!! AND DHT IN JAVASCRIPT!!
----
-
 # Example
+
+---
+> USES HELIA!!!! DHT IN JAVASCRIPT!!
+---
 
 This example shows replication of dynamic content using IPLD, IPNS, and Provider Records.
 There are 3 [helia](https://github.com/ipfs/helia) (ipfs) nodes running in a single script, named `client1`, `client2`, and `server`.
