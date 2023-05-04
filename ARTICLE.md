@@ -238,10 +238,4 @@ Have a question? Create an [issue](https://github.com/tabcat/dynamic-content/iss
 
 **Q**: Isn't this going to be slow?
 
-**A**: This design is meant to complement real-time replication by providing a general and reliable layer to fallback to. It adds two steps on top of resolving a CID, the DHT provider query, and the IPNS name resolutions.
-
-<br/>
-
-**Q**: 
-
-**A**: 
+**A**: This design is meant to complement real-time replication by providing a general and reliable layer to fallback to. It adds two steps on top of resolving a CID, the DHT provider query, and the IPNS name resolutions. Implementers will need to think about how efficiently the IPLD layer can be replicated for their use-case.
