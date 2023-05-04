@@ -50,7 +50,7 @@ dcid = toCID('dynamic' + cid)
 ```
 
 ---
-> There is an example at the end of this article which shows everything working together.
+> **There is an example at the end of this article which shows everything working together.**
 ---
 
 ## Viewed as a Replication Protocol
@@ -115,7 +115,7 @@ This feature is needed for the full implementation of the edge-computed applicat
 ## Example
 
 ---
-> USES HELIA!!!! DHT IN JAVASCRIPT!! DYNAMIC CONTENT ON IPFS!?!?
+> **USES HELIA!!!! DHT IN JAVASCRIPT!! DYNAMIC CONTENT ON IPFS!?!?**
 ---
 
 This example shows replication of dynamic content using IPLD, IPNS, and Provider Records.
@@ -163,7 +163,9 @@ The `server` represents a reliable machine used as a
 1. IPLD pinning server
 2. DHT server
 
-> IPNS and Provider records are both stored in the DHT.
+---
+> **IPNS and Provider records are both stored in the DHT.**
+---
 
 The clients are unreliable machines used to read and write dynamic content.
 In the example `client1` does all the writing and `client2` does all the reading.
