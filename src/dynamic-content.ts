@@ -20,12 +20,12 @@ export async function DynamicContent (
   const bytes = new Uint8Array(dynamic.length + manifest.cid.multihash.digest.length)
   bytes.set(dynamic)
   bytes.set(manifest.cid.multihash.digest, dynamic.length)
-  const cid = CID.create(
+  const dcid = CID.create(
     manifest.cid.version,
     manifest.cid.code,
     await hasher.digest(bytes)
   )
 
-  return { id: cid, manifest }
+  return { id: dcid, manifest }
 }
 
