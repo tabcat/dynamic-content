@@ -226,4 +226,12 @@ Sound interesting? Get involved! Come [chat](https://matrix.to/#/#hldb:matrix.or
 
 Have a question? Create an [issue](https://github.com/tabcat/dynamic-content/issues)!
 
-[I](https://github.com/tabcat)'m working on this in [hldb/welo](https://github.com/hldb/welo).
+[I](https://github.com/tabcat)'m working on this in [tabcat/zzzync](https://github.com/tabcat/zzzync).
+
+## FAQ
+
+**Q**: Why not just share an IPNS name to update?
+
+**A**: IPNS names are not built to handle concurrent writes and should not be extended to do so. They are versioned documents that one device should be able to update. As shown here they are extremely useful for creating a system that can handle concurrent writes.
+
+
