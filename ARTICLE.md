@@ -30,8 +30,14 @@ The main contribution is the novel use of Provider Records.
 Instead of pointing from a CID to peerIDs of nodes hosting that content, they are used to point from a Dynamic-Content ID to IPNS names.
 The resulting IPNS names each resolve to the latest CID of a device's local replica.
 
-A device can query the provider records for dynamic content, then read from the remote replicas and merge them locally. All of this can happen without knowing any previous collaborators, or needing them to be online as long as their replica data is kept available via a pinner.
+A device can:
 
+  1. Query the provider records for some dynamic content
+  2. Turn the returned provider peerIDs into IPNS names
+  3. Resolve the IPNS names to the CID of a remote replica
+  4. Traverse the remote replica's data and merge it locally
+
+All of this can happen without knowing any previous collaborators, or needing them to be online as long as their replica data is kept available via a pinner.
 
 <img src="https://raw.githubusercontent.com/tabcat/dynamic-content/master/.assets/dynamic-content-diagram.png" width="333">
 
