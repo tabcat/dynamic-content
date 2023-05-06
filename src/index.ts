@@ -34,8 +34,8 @@ const client2 = await createHeliaNode(createLibp2pConfig(true))
 const server = await createHeliaNode(createLibp2pConfig(false))
 console.log('server is pinning ipld and serving dht ipns and provider records')
 
-const name1 = await ipns(client1, [dht(client1)])
-const name2 = await ipns(client2, [dht(client2)])
+const name1 = ipns(client1, [dht(client1)])
+const name2 = ipns(client2, [dht(client2)])
 
 // manifest document describes the dynamic content
 const dynamicContent = await DynamicContent({
