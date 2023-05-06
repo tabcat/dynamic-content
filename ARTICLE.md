@@ -42,7 +42,7 @@ All of this can happen without knowing any previous collaborators, or needing th
 <img src="https://raw.githubusercontent.com/tabcat/dynamic-content/master/.assets/dynamic-content-diagram.png" width="333">
 
 ---
-> **The Merkle-DAG structure of IPFS enables traversing only the necessary pieces of content. Without this property, replication over the immutable data would not be realistic.**
+> **The Merkle-DAGs built with IPLD can provide a persistent and efficient layer for collaborators to sync.**
 ---
 
 ### Dynamic-Content IDs
