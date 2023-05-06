@@ -42,7 +42,7 @@ All of this can happen without knowing any previous collaborators, or needing th
 <img src="https://raw.githubusercontent.com/tabcat/dynamic-content/master/.assets/dynamic-content-diagram.png" width="333">
 
 ---
-> **The Merkle-DAGs built with IPLD can provide a persistent and efficient layer for collaborators to sync.**
+> **The Merkle-DAGs built with IPLD provide a persistent and efficient layer for collaborators to sync.**
 ---
 
 ### Dynamic-Content IDs
