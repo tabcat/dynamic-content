@@ -51,12 +51,12 @@ When searching the network for static content, a CID is used to find providers i
 
 ```js
 manifest = { protocol: '/some-protocol/1.0.0', params: { network: 1 } }
-cid = toCID(manifest)
-dcid = toCID('dynamic' + cid)
+cid = CID(manifest)
+dcid = CID('dynamic' + cid)
 ```
 
 ---
-> **There is an example at the end of this article which shows everything working together.**
+> **There is an example at the end of this article that shows everything working together.**
 ---
 
 ## Viewed as a Replication Protocol
@@ -101,13 +101,13 @@ If not, query the DHT for collaborators' IPNS names to fetch and merge replicas 
 After committing changes to the local replica, periodically push updates to pinning servers and refresh the IPNS to reference the new root.
 
 ---
-> **Pinning servers in this context provide a general and reliable replication layer to fallback to when no other collaborators are online.**
+> **Pinning servers, in this context, provide a general and reliable replication layer to fall back on when no other collaborators are online.**
 ---
 
 ## Roadblock, Workaround, and Hopeful Future
 
-It should be clear now that using Provider Records this way was not intented.
-Which brings us to the roadblock...
+It should be clear now that using Provider Records this way was not intended.
+This brings us to the roadblock...
 
 [DHT servers validate that the peerIDs inside received Provider Records match the peerID of the node adding them.](https://github.com/libp2p/specs/tree/master/kad-dht#rpc-messages)
 
@@ -124,11 +124,11 @@ This feature is needed for the full implementation of the edge-computed applicat
 > **USES HELIA!!!! DHT IN JAVASCRIPT!! DYNAMIC CONTENT ON IPFS!?!?**
 ---
 
-This example shows replication of dynamic content using IPLD, IPNS, and Provider Records.
-There are 3 [helia](https://github.com/ipfs/helia) (ipfs) nodes running in a single script, named `client1`, `client2`, and `server`.
-Libp2p is used by `client1` and `client2` to dial `server` and use the `/ipfs/kad/1.0.0` protocol.
-This allows clients to add IPNS and Provider records to the DHT server.
-Clients add IPLD data to `server` programmatically.
+This example shows dynamic-content replication using IPLD, IPNS, and Provider Records.
+There are 3 [helia](https://github.com/ipfs/helia) (IPFS) nodes running in a single script, named `client1`, `client2`, and `server`.
+`client1` and `client2` dial `server` and use the `/ipfs/kad/1.0.0` protocol.
+After dialing, clients can add IPNS and Provider records to the DHT server.
+Clients also add IPLD data to `server` programmatically.
 
 ```mermaid
 flowchart LR
@@ -136,9 +136,9 @@ flowchart LR
 ```
 
 ---
-> **`client1`, `client2`, and `server ` are all in memory helia nodes created by a single script.**
+> **`client1`, `client2`, and `server ` are all in memory Helia nodes created by a single script.**
 
-> **IPLD data is added to the server by clients by accessing `server.blockstore.put` from within the script. As opposed to using an HTTP API like in any real usecase.**
+> **IPLD data is added to the server by clients by accessing `server.blockstore.put` from within the script (programmatically). As opposed to using an HTTP API like in any real use-case.**
 ---
 
 ### Usage
@@ -155,15 +155,15 @@ flowchart LR
 
 #### Run Examples
 
-There are two example scripts. One is interactive, meaning after the example runs a REPL is started with global variables available to operate the replication manually.
+There are two example scripts. One is interactive, meaning after the example runs, a REPL starts with global variables available to operate the replication manually.
 
 The scripts are `npm run example` and `npm run interactive`.
 
-**If something is not working please open an [issue](https://github.com/tabcat/dynamic-content/issues)!**
+**If something is broken please open an [issue](https://github.com/tabcat/dynamic-content/issues)!**
 
 ### What's Happening?
 
-The example consists 3 [helia](https://github.com/ipfs/helia) nodes, named `client1`, `client2`, and `server`.
+The example consists of 3 [Helia](https://github.com/ipfs/helia) nodes, named `client1`, `client2`, and `server`.
 The `server` represents a reliable machine used as a
 
 1. IPLD pinning server
@@ -174,14 +174,14 @@ The `server` represents a reliable machine used as a
 ---
 
 The clients are unreliable machines used to read and write dynamic content.
-In the example `client1` does all the writing and `client2` does all the reading.
+In the example, `client1` does all the writing, and `client2` does all the reading.
 
 ```mermaid
 sequenceDiagram
     client1->>client1: update replica
     client1->>server: push replica data
     client1->>server: IPNS publish replica CID
-    client1->>server: add IPNS as provider of DCID
+    client1->>server: add IPNS as a provider of DCID
 
     client2->>server: find providers for DCID
     server-->>client2: client1 is provider
@@ -194,30 +194,30 @@ sequenceDiagram
 
 <br/>
 
-Obviously this is a very high overview of what's going on.
-Important to remember only IPLD/IPNS/Provider Records are being used.
-It's a good idea to read [index.ts](./src/index.ts) (~200 LOC) to see what is happening up close.
+This is a very high overview of what's going on.
+Remember, this design uses only IPLD/IPNS/Provider Records.
+It may be helpful to read [index.ts](./src/index.ts) (~200 LOC) for clarity.
 
 ### Read and Write Steps
 
-Describes the process of read/write dynamic content to IPFS:
+Describes the process of reading/writing dynamic content to IPFS:
 
 #### Writing
 
-1. Make changes to local replica
-2. Push replica data to IPLD pinner
+1. Make changes to the local replica
+2. Push replica data to the IPLD pinner
 3. Republish IPNS to point to new CID root
 4. Add IPNS key as a provider of the Dynamic Content's ID
 
 #### Reading
 
 1. Query the DHT for Providers of the Dynamic Content's ID
-2. Resolve providers IPNS keys to CIDs
+2. Resolve providers' IPNS keys to CIDs
 3. Resolve CIDs to IPLD data
-4. Merge changes with local replica
+4. Merge changes with the local replica
 
 ---
-> **Note: in practice the DHT queries related to the Dynamic Content's ID just need to be ran on init, and then switch to a protocol meant for real-time replication with online collaborators.**
+> **Note: in practice, the DHT queries related to the Dynamic Content's ID only need to be run initially. Afterward, a protocol meant for real-time replication with online collaborators can be used.**
 ---
 
 ## Get Involved
@@ -232,16 +232,18 @@ Have a question? Create an [issue](https://github.com/tabcat/dynamic-content/iss
 
 **Q**: Why not just share an IPNS name to update?
 
-**A**: IPNS names are not built to handle concurrent writes and should not be extended to do so. They are versioned documents that one device should be able to update. As shown here they are extremely useful for creating a system that can handle concurrent writes.
+**A**: IPNS names are not built to handle concurrent writes and should not be extended to do so. They are signed, versioned documents that one device should be able to update. As shown here, they are essential for creating a system that can handle concurrent writes.
 
 <br/>
 
 **Q**: Isn't this going to be slow?
 
-**A**: This design is meant to complement real-time replication by providing a general and reliable layer to fallback to. It adds two steps on top of resolving a CID, the DHT provider query, and the IPNS name resolutions. Implementers will need to think about how efficiently the IPLD layer can be replicated for their use-case.
+**A**: This design complements real-time replication by providing a general and reliable layer to fall back to. It adds two steps on top of resolving a CID 1) the DHT provider query and 2) the IPNS name resolutions.
+Developers must reason how to design replicas for efficient storage and replication over IPLD.
 
 <br/>
 
-**Q**: Provider Records weren't built to support this use-case. Could this affect DHT measurements?
+**Q**: Provider Records do not support this use case. Could this affect DHT measurements?
 
-**A**: It's possible this could affect DHT measurements if it becomes prevalent. Using regular Provider Records this way would make it look like content providers are not online, because the peerIDs are used only for IPNS.
+**A**: If this use case became prevalent, it could affect DHT measurements. Using Provider Records this way would make it look like the content providers are offline because the peerIDs are used only for IPNS.
+
