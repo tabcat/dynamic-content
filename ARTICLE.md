@@ -247,3 +247,8 @@ Developers must reason how to design replicas for efficient storage and replicat
 
 **A**: If this use case became prevalent, it could affect DHT measurements. Using Provider Records this way would make it look like the content providers are offline because the peerIDs are used only for IPNS.
 
+<br/>
+
+**Q**: Could IPNS and Provider Records be swapped out for alternatives and still achieve the same goal?
+
+**A**: Absolutely. The goal is to provide a general and reliable replication layer. Additionally, the more common and widespread the building blocks used, the more existing infrastructure can be leveraged.
