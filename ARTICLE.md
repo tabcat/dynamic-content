@@ -198,6 +198,114 @@ This is a very high overview of what's going on.
 Remember, this design uses only IPLD/IPNS/Provider Records.
 It may be helpful to read [index.ts](./src/index.ts) (~200 LOC) for clarity.
 
+### Sample Outputs
+
+In case you are unable to run the example, below shows all the output that would occur:
+
+<details>
+  <summary>`npm run example`</summary>
+  
+  ```sh
+$ npm run example
+
+> dynamic-content@1.0.0 example
+> npm run build && node dist/index.js
+
+
+> dynamic-content@1.0.0 build
+> tsc
+
+server is pinning ipld and serving dht ipns and provider records
+client1: online
+client1: added new values to set { nerf this }
+client1: set state: { nerf this }
+client1: encoded to raw data
+client1: pushed data to pinner
+client1: published ipns:12D3KooWRzE1FNCRXuz1C8Z3G8Q5oBg3C5nhKANSsFq377P1mWVn with value cid:bafyreihypffwyzhujryetatiy5imqq3p4mokuz36xmgp7wfegnhnjhwrsq
+client1: advertised ipns:12D3KooWRzE1FNCRXuz1C8Z3G8Q5oBg3C5nhKANSsFq377P1mWVn as set provider
+client1: offline
+
+--- no peers online, Zzzzz ---
+
+client2: online
+dht query returned empty response
+client2: found ipns:12D3KooWRzE1FNCRXuz1C8Z3G8Q5oBg3C5nhKANSsFq377P1mWVn as set provider
+client2: resolved ipns:12D3KooWRzE1FNCRXuz1C8Z3G8Q5oBg3C5nhKANSsFq377P1mWVn to bafyreihypffwyzhujryetatiy5imqq3p4mokuz36xmgp7wfegnhnjhwrsq
+client2: resolved ipfs:bafyreihypffwyzhujryetatiy5imqq3p4mokuz36xmgp7wfegnhnjhwrsq to raw data
+client2: decoded raw data
+client2: added new values to set { nerf this }
+client2: set state: { nerf this }
+client2: offline
+  ```
+</details>
+
+<details>
+  <summary>`npm run interactive`</summary>
+  
+  ```sh
+$ npm run interactive
+
+> dynamic-content@1.0.0 interactive
+> npm run build && node dist/interactive.js
+
+
+> dynamic-content@1.0.0 build
+> tsc
+
+server is pinning ipld and serving dht ipns and provider records
+client1: online
+client1: added new values to set { nerf this }
+client1: set state: { nerf this }
+client1: encoded to raw data
+client1: pushed data to pinner
+client1: published ipns:12D3KooWQXCo6Wzw7NmJRLC2peAX7fU6gHSydEKNAJfyfXCEwHFL with value cid:bafyreihypffwyzhujryetatiy5imqq3p4mokuz36xmgp7wfegnhnjhwrsq
+client1: advertised ipns:12D3KooWQXCo6Wzw7NmJRLC2peAX7fU6gHSydEKNAJfyfXCEwHFL as set provider
+client1: offline
+
+--- no peers online, Zzzzz ---
+
+client2: online
+dht query returned empty response
+client2: found ipns:12D3KooWQXCo6Wzw7NmJRLC2peAX7fU6gHSydEKNAJfyfXCEwHFL as set provider
+client2: resolved ipns:12D3KooWQXCo6Wzw7NmJRLC2peAX7fU6gHSydEKNAJfyfXCEwHFL to bafyreihypffwyzhujryetatiy5imqq3p4mokuz36xmgp7wfegnhnjhwrsq
+client2: resolved ipfs:bafyreihypffwyzhujryetatiy5imqq3p4mokuz36xmgp7wfegnhnjhwrsq to raw data
+client2: decoded raw data
+client2: added new values to set { nerf this }
+client2: set state: { nerf this }
+client2: offline
+
+--- interactive example ---
+
+client1: online
+client2: online
+
+  Usage:
+
+  globals
+
+  help: this message
+
+  client1: helia client node (sender)
+  client2: helia client node (receiver)
+  server: helia ipld/ipns pinner and dht server
+
+  // compare the 2 clients sets
+  set1: client1's set variable
+  set2: client2's set variable
+
+  await connect(<client>)       // connects client to server
+  await disconnect(<client>)    // disconnects client from server
+
+  await update(...<string[]>)   // create and publish changes from client1 - requires client1 to be connected
+  await sync()                  // syncs changes to client2 - requires client2 to be connected
+
+>
+  ```
+
+At this point the REPL is started and `await update(<string>)` followed by `await sync()` can be executed along with looking at variables like `set1` and `set2` at different points of the replication.
+
+</details>
+
 ### Read and Write Steps
 
 Describes the process of reading/writing dynamic content to IPFS:
