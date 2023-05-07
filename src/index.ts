@@ -42,16 +42,18 @@ const dynamicContent = await DynamicContent({
   protocol: '/dynamic-content-example/set/1.0.0',
   param: { network: 1 }
 })
+// dynamic-content id is permutation of the manifest document's cid
+const dcid = dynamicContent.id
 
 // (dcid -> ipns)
 // add ipns key as provider for dcid
-const advertise = (client: Helia) => async () => await all(client.libp2p.dht.provide(dynamicContent.id))
+const advertise = (client: Helia) => async () => await all(client.libp2p.dht.provide(dcid))
 // find providers of dcid to get ipns of collaborators
 const query = (client: Helia) => async () => {
   let i = 0
   let providers: ProviderEvent[] = []
   while (providers.length === 0 && i <3 /* u */) {
-    const responses = await all(client.libp2p.dht.findProviders(dynamicContent.id))
+    const responses = await all(client.libp2p.dht.findProviders(dcid))
     providers = responses.filter(r => r.name === 'PROVIDER') as ProviderEvent[]
     i++
   }
