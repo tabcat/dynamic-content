@@ -30,13 +30,6 @@ The main contribution is the novel use of Provider Records.
 Instead of pointing from a CID to peerIDs of nodes hosting that content, they are used to point from a Dynamic-Content ID to IPNS names.
 The resulting IPNS names each resolve to the latest CID of a device's local replica.
 
-A device can:
-
-  1. Query the provider records for some dynamic content
-  2. Turn the returned provider peerIDs into IPNS names
-  3. Resolve the IPNS names to the CID of a remote replica
-  4. Traverse the remote replica's data and merge it locally
-
 All of this can happen without knowing any previous collaborators, or needing them to be online as long as their replica data is kept available via a pinner.
 
 <img src="https://raw.githubusercontent.com/tabcat/dynamic-content/master/.assets/dynamic-content-diagram.png" width="333">
@@ -58,6 +51,24 @@ dcid = CID('dynamic' + cid)
 ---
 > **There is an example at the end of this article that shows everything working together.**
 ---
+
+### Read and Write Steps
+
+Describes the process of reading/writing dynamic content to IPFS:
+
+#### Writing
+
+1. Make changes to the local replica
+2. Push replica data to the IPLD pinner
+3. Republish IPNS to point to new CID root
+4. Add IPNS key as a provider of the Dynamic Content's ID
+
+#### Reading
+
+1. Query the DHT for Providers of the Dynamic Content's ID
+2. Resolve providers' IPNS keys to CIDs
+3. Resolve CIDs to IPLD data
+4. Merge changes with the local replica
 
 ## Viewed as a Replication Protocol
 
@@ -305,24 +316,6 @@ client2: online
 At this point the REPL is started and `await update(<string>)` followed by `await sync()` can be executed along with looking at variables like `set1` and `set2` at different points of the replication.
 
 </details>
-
-### Read and Write Steps
-
-Describes the process of reading/writing dynamic content to IPFS:
-
-#### Writing
-
-1. Make changes to the local replica
-2. Push replica data to the IPLD pinner
-3. Republish IPNS to point to new CID root
-4. Add IPNS key as a provider of the Dynamic Content's ID
-
-#### Reading
-
-1. Query the DHT for Providers of the Dynamic Content's ID
-2. Resolve providers' IPNS keys to CIDs
-3. Resolve CIDs to IPLD data
-4. Merge changes with the local replica
 
 ---
 > **Note: in practice, the DHT queries related to the Dynamic Content's ID only need to be run initially. Afterward, a protocol meant for real-time replication with online collaborators can be used.**
