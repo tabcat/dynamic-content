@@ -252,7 +252,10 @@ client2: offline
 
 <details>
   <summary>`npm run interactive`</summary>
-  
+   <br/>
+
+  The interactive example starts a REPL after the example has run. 
+
   ```sh
 $ npm run interactive
 
@@ -312,9 +315,6 @@ client2: online
 
 >
   ```
-
-At this point the REPL is started and `await update(<string>)` followed by `await sync()` can be executed along with looking at variables like `set1` and `set2` at different points of the replication.
-
 </details>
 
 ---
