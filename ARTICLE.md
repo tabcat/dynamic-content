@@ -62,7 +62,7 @@ A [Libp2p peerID](https://docs.libp2p.io/concepts/fundamentals/peers/#peer-id) i
 [Provider Records](https://docs.ipfs.tech/concepts/dht/) are a fundamental part of IPFS's Distributed Hash Table (DHT). When requesting IPFS content, a node queries the DHT for Provider Records associated with the requested CID. These records contain the PeerID of peers with the content, enabling the user to establish a connection and retrieve the data.
 
 ---
-> **It's important to note that IPNS names can be derived from PeerIDs**
+> **It's important to note that IPNS names and PeerIDs use the same [key structures](https://specs.ipfs.tech/ipns/ipns-record/#ipns-keys)**
 ---
 
 ## Defining the Problem
