@@ -123,9 +123,10 @@ This context makes it challenging to build upon the history of collaborators, a 
 
 ### Replication
 
-When other collaborators are online, use an application-specific replication protocol for real-time collaboration.
-If not, query the DHT for collaborators' IPNS names to fetch and merge replicas from pinning servers.
-After committing changes to the local replica, periodically push updates to pinning servers and refresh the IPNS to reference the new root.
+The design presented in this article is a replication protocol.
+However it is not useful for real-time replication.
+Applications with real-time features should include an app-specific replication protocol to be used with other online collaborators.
+Combining two replicaton protocols with these protperties results in preserved and real-time P2P application.
 
 ---
 > **Pinning servers, in this context, provide a general and reliable replication layer to fall back on when no other collaborators are online.**
