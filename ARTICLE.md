@@ -350,6 +350,10 @@ Have a question? Create an [issue](https://github.com/tabcat/dynamic-content/iss
 
 [I](https://github.com/tabcat)'m working on this in [tabcat/zzzync](https://github.com/tabcat/zzzync).
 
+## Credits
+
+Big thanks to [@autonome](https://github.com/autonome) and [@SgtPooki](https://github.com/sgtpooki) for help writing this article!
+
 ## FAQ
 
 **Q**: Why not just share an IPNS name to update?
