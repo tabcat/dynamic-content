@@ -383,6 +383,8 @@ client2: online
 
 Big thanks to [@autonome](https://github.com/autonome) and [@SgtPooki](https://github.com/sgtpooki) for help writing this article!
 
+Also thanks to [@willscott](https://github.com/willscott) for answering all my DHT questions in [#libp2p-implementers](https://app.element.io/#/room/#libp2p-implementers:ipfs.io).
+
 ## Get Involved
 
 Sound interesting? Get involved! Come [chat](https://matrix.to/#/#hldb:matrix.org)!
