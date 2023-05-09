@@ -43,7 +43,7 @@ The InterPlanetary File System (IPFS) is a distributed, peer-to-peer file system
 
 ### CID
 
-A [CID](https://docs.ipfs.tech/concepts/how-ipfs-works/#how-ipfs-represents-and-addresses-data) is a unique, self-describing identifier used reference and identify static content based on its cryptographic hash.
+A [CID](https://docs.ipfs.tech/concepts/how-ipfs-works/#how-ipfs-represents-and-addresses-data) is a unique, self-describing identifier used to reference and identify static content based on its cryptographic hash.
 
 ### IPLD
 
@@ -67,9 +67,9 @@ A [Libp2p peerID](https://docs.libp2p.io/concepts/fundamentals/peers/#peer-id) i
 
 ## Defining the Problem
 
-IPFS pinning services simplify static content availability, but lack solutions for dynamic content.
+IPFS pinning services simplify keeping static content available, but lack solutions for dynamic content.
 Current P2P dynamic content solutions often roll their own replication protocols and depend on reliable peers.
-This is an issue for local-first databases which are highly sharded and live on unreliable end-user devices.
+Depending on reliable peers is an issue for local-first databases, which are often highly sharded and live on end-user devices.
 Developing a general and reliable layer for dynamic content would benefit all related solutions.
 
 ## Achieving Dynamicity
@@ -87,7 +87,7 @@ The design presented in this article works similarly but replaces pubsub with Pr
 ---
 
 The main contribution is the novel use of Provider Records.
-Instead of pointing from a CID to peerIDs of nodes hosting that content, they are used to point from a Dynamic-Content ID to IPNS names.
+Instead of pointing from a CID to peerIDs of nodes hosting that content, point from a Dynamic-Content ID to IPNS names.
 The resulting IPNS names each resolve to the latest CID of a device's local replica.
 
 All of this can happen without knowing any previous collaborators, or needing them to be online as long as their replica data is kept available via a pinner.
@@ -102,20 +102,20 @@ All of this can happen without knowing any previous collaborators, or needing th
 
 ### Dynamic-Content IDs
 
-A Dynamic-Content ID (DCID) is a CID. DCIDs and CIDs are both used to reference and identify content on the DHT.
+A Dynamic-Content ID (DCID) is a CID. Both DCIDs and CIDs reference and identify content on the DHT.
 Where they diverge is how they are derived.
-While CIDs are derived from the hash of some static content, DCIDs are derived from permutating the CID of a manifest document.
+While CIDs are the hash of some static content, DCIDs are a permutation of the CID of a manifest document.
 This immutable manifest document describes the dynamic content.
 
 https://github.com/tabcat/dynamic-content/blob/e4df337d4f806ba530efa94b01e7bda2432ffa8d/src/dynamic-content.ts#L7-L30
 
-The sample above is shows a manifest document "describing" the dynamic content by including `protocol` and `parameters` properties.
-With these properties it should be possible to keep uniquely identify some dynamic content.
+The sample above shows a manifest document "describing" the dynamic content by including `protocol` and `parameters` properties.
+The resulting DCID, a result of the properties inside the manifest, uniquely identifies some dynamic content.
 
 > Why not just use the CID of the manifest document to identify the content?
 
 If the same CID were used to identify the manifest document and the dynamic content, then requesting the providers of one would return the providers of both (bad/not good).
-Being able to refer to the dynamic content directly may have it's own advantages as well (e.g. \<dcid\>/\<path or query\>).
+Being able to refer to the dynamic content directly may have its own advantages as well (e.g. \<dcid\>/\<path or query\>).
 
 ---
 > **The code sample shown above is from an example at the end of this article that shows everything working together.**
@@ -161,9 +161,9 @@ This context makes it challenging to build upon the history of collaborators, a 
 ### Replication
 
 The design presented in this article is a replication protocol.
-However it is not useful for real-time replication.
-Applications with real-time features should include an app-specific replication protocol to be used with other online collaborators.
-Combining two replicaton protocols with these protperties results in preserved and real-time P2P application.
+However, it is not a real-time replication protocol.
+Applications with real-time features should include an app-specific replication protocol for use with other online collaborators.
+Combining two replication protocols with these properties results in preserved and real-time P2P applications.
 
 ---
 > **Pinning servers, in this context, provide a general and reliable replication layer to fall back on when no other collaborators are online.**
@@ -184,8 +184,8 @@ The workaround, for now, will involve spinning up ephemeral libp2p nodes to add 
 
 ### No Delegated Refreshing of IPNS OR Provider Records
 
-To realize the edge-computed applications use-case, delegation of publishing of IPNS and Provider Records to the DHT is necessary.
-Unfortunately there are no official plans to add this feature.
+To realize the edge-computed applications use-case, the delegation of publishing of IPNS and Provider Records to the DHT is necessary.
+Unfortunately, there are no official plans to add this feature.
 
 ## Example
 
@@ -415,3 +415,4 @@ Developers must reason how to design replicas for efficient storage and replicat
 **Q**: Could IPNS and Provider Records be swapped out for alternatives and still achieve the same goal?
 
 **A**: Absolutely. The goal is to provide a general and reliable replication layer. Additionally, the more common and widespread the building blocks used, the more existing infrastructure can be leveraged.
+
