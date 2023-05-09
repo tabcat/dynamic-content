@@ -41,10 +41,6 @@ The InterPlanetary File System (IPFS) is a distributed, peer-to-peer file system
 
 ## Understanding Key Components
 
-### CID
-
-A [CID](https://docs.ipfs.tech/concepts/how-ipfs-works/#how-ipfs-represents-and-addresses-data) is a unique, self-describing identifier used to reference and identify static content based on its cryptographic hash.
-
 ### IPLD
 
 [IPLD](https://ipld.io/) is a data model for linking and addressing data across distributed systems. In IPFS, IPLD stores immutable data, providing [content-addressed storage](https://en.wikipedia.org/wiki/Content-addressable_storage). Data stored in IPLD has a unique [Content Identifier](https://docs.ipfs.tech/concepts/content-addressing/) (CID) derived from its content, ensuring data integrity.
