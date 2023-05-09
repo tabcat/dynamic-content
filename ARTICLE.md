@@ -4,6 +4,10 @@ The InterPlanetary File System (IPFS) is a distributed, peer-to-peer file system
 
 ## Understanding Key Components
 
+### CID
+
+A [CID](https://docs.ipfs.tech/concepts/how-ipfs-works/#how-ipfs-represents-and-addresses-data) is a unique, self-describing identifier used reference and identify static content based on its cryptographic hash.
+
 ### IPLD
 
 [IPLD](https://ipld.io/) is a data model for linking and addressing data across distributed systems. In IPFS, IPLD stores immutable data, providing [content-addressed storage](https://en.wikipedia.org/wiki/Content-addressable_storage). Data stored in IPLD has a unique [Content Identifier](https://docs.ipfs.tech/concepts/content-addressing/) (CID) derived from its content, ensuring data integrity.
@@ -40,16 +44,23 @@ All of this can happen without knowing any previous collaborators, or needing th
 
 ### Dynamic-Content IDs
 
-When searching the network for static content, a CID is used to find providers in the DHT. When searching for dynamic content a CID is still used. However, this CID does not belong to any static content. Instead, it is a permutation of the CID of an immutable manifest document that describes the dynamic content:
+A Dynamic-Content ID (DCID) is a CID. DCIDs and CIDs are both used to reference and identify content on the DHT.
+Where they diverge is how they are derived.
+While CIDs are derived from the hash of some static content, DCIDs are derived from permutating the CID of a manifest document.
+This immutable manifest document describes the dynamic content.
 
-```js
-manifest = { protocol: '/some-protocol/1.0.0', params: { network: 1 } }
-cid = CID(manifest)
-dcid = CID('dynamic' + cid)
-```
+https://github.com/tabcat/dynamic-content/blob/e4df337d4f806ba530efa94b01e7bda2432ffa8d/src/dynamic-content.ts#L7-L30
+
+The sample above is shows a manifest document "describing" the dynamic content by including `protocol` and `parameters` properties.
+With these properties it should be possible to keep uniquely identify some dynamic content.
+
+> Why not just use the CID of the manifest document to identify the content?
+
+If the same CID were used to identify the manifest document and the dynamic content, then requesting the providers of one would return the providers of both (bad/not good).
+Being able to refer to the dynamic content directly may have it's own advantages as well (e.g. \<dcid\>/\<path or query\>).
 
 ---
-> **There is an example at the end of this article that shows everything working together.**
+> **The code sample shown above is from an example at the end of this article that shows everything working together.**
 ---
 
 ### Read and Write Steps
