@@ -32,8 +32,8 @@ The InterPlanetary File System (IPFS) is a distributed, peer-to-peer file system
     + [Run Examples](#run-examples)
   * [What's Happening?](#whats-happening)
   * [Sample Outputs](#sample-outputs)
-- [Get Involved](#get-involved)
 - [Credits](#credits)
+- [Get Involved](#get-involved)
 - [FAQ](#faq)
 
 <!-- TOC end -->
@@ -379,6 +379,10 @@ client2: online
 > **Note: in practice, the DHT queries related to the Dynamic Content's ID only need to be run initially. Afterward, a protocol meant for real-time replication with online collaborators can be used.**
 ---
 
+## Credits
+
+Big thanks to [@autonome](https://github.com/autonome) and [@SgtPooki](https://github.com/sgtpooki) for help writing this article!
+
 ## Get Involved
 
 Sound interesting? Get involved! Come [chat](https://matrix.to/#/#hldb:matrix.org)!
@@ -386,10 +390,6 @@ Sound interesting? Get involved! Come [chat](https://matrix.to/#/#hldb:matrix.or
 Have a question? Create an [issue](https://github.com/tabcat/dynamic-content/issues)!
 
 [I](https://github.com/tabcat)'m working on this in [tabcat/zzzync](https://github.com/tabcat/zzzync).
-
-## Credits
-
-Big thanks to [@autonome](https://github.com/autonome) and [@SgtPooki](https://github.com/sgtpooki) for help writing this article!
 
 ## FAQ
 
