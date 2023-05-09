@@ -132,10 +132,12 @@ Combining two replicaton protocols with these protperties results in preserved a
 > **Pinning servers, in this context, provide a general and reliable replication layer to fall back on when no other collaborators are online.**
 ---
 
-## Roadblock, Workaround, and Hopeful Future
+## Roadblocks and Workarounds
 
 It should be clear now that using Provider Records this way was not intended.
 This brings us to the roadblock...
+
+### No 3rd Party Publishing to DHT
 
 [DHT servers validate that the peerIDs inside received Provider Records match the peerID of the node adding them.](https://github.com/libp2p/specs/tree/master/kad-dht#rpc-messages)
 
@@ -143,8 +145,10 @@ This check makes adding Provider Records for multiple peerIDs to the DHT difficu
 Not great if you want to participate in multiple pieces of dynamic content as each will require its own IPNS name.
 The workaround, for now, will involve spinning up ephemeral libp2p nodes to add each IPNS name as a provider every [22hours](https://github.com/libp2p/specs/tree/master/kad-dht#content-provider-advertisement-and-discovery).
 
-Hopefully, in the future, it will be possible to delegate keeping Provider and IPNS records fresh to pinning servers.
-This feature is needed for the full implementation of the edge-computed applications use-case and is not yet possible.
+### No Delegated Refreshing of IPNS OR Provider Records
+
+To realize the edge-computed applications use-case, delegation of publishing of IPNS and Provider Records to the DHT is necessary.
+Unfortunately there are no official plans to add this feature.
 
 ## Example
 
