@@ -37,6 +37,18 @@ Developing a general and reliable layer for dynamic content would benefit all re
 
 ## Achieving Dynamicity
 
+There exist protocols for dynamic content that use IPFS with Libp2p Gossipsub to replicate; one example is [OrbitDB](https://github.com/orbitdb).
+In short, OrbitDB's replication protocol uses pubsub to find collaborators and share the latest root CIDs of replicas. Then these CIDs are used to fetch replicas from collaborators using IPFS.
+
+The design presented in this article works similarly but replaces pubsub with Provider Records and IPNS. Essentially, all parts of replication get encoded into ~persistent IPFS components.
+
+- Provider Records to find collaborators
+- IPNS to point to the latest version of a replica
+
+---
+> **Swapping pubsub for ~persistent components makes building on history without any collaborators online possible.**
+---
+
 The main contribution is the novel use of Provider Records.
 Instead of pointing from a CID to peerIDs of nodes hosting that content, they are used to point from a Dynamic-Content ID to IPNS names.
 The resulting IPNS names each resolve to the latest CID of a device's local replica.
@@ -47,6 +59,8 @@ All of this can happen without knowing any previous collaborators, or needing th
 
 ---
 > **The Merkle-DAGs built with IPLD provide a persistent and efficient layer for collaborators to sync.**
+
+> **Titling this article 'Replication on IPFS' might have been more accurate, but 'Hosting Dynamic Content on IPFS' sounded waaay better.**
 ---
 
 ### Dynamic-Content IDs
@@ -87,22 +101,6 @@ Describes the process of reading/writing dynamic content to IPFS:
 2. Resolve providers' IPNS keys to CIDs
 3. Resolve CIDs to IPLD data
 4. Merge changes with the local replica
-
-## Viewed as a Replication Protocol
-
-There exist protocols for dynamic content that use IPFS with Libp2p Gossipsub to replicate; one example is [OrbitDB](https://github.com/orbitdb).
-In short, OrbitDB's replication protocol uses pubsub to find collaborators and share the latest root CIDs of replicas. Then these CIDs are used to fetch replicas from collaborators using IPFS.
-
-The design presented in this article works similarly but replaces pubsub with Provider Records and IPNS. Essentially, all parts of replication get encoded into ~persistent IPFS components.
-
-- Provider Records to find collaborators
-- IPNS to point to the latest version of a replica
-
----
-> **Swapping pubsub for ~persistent components makes building on history without any collaborators online possible.**
-
-> **Titling this article 'Replication on IPFS' might have been more accurate, but 'Hosting Dynamic Content on IPFS' sounded waaay better.**
----
 
 ## Use-case: Edge-computed Applications
 
