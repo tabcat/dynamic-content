@@ -2,6 +2,40 @@
 
 The InterPlanetary File System (IPFS) is a distributed, peer-to-peer file system designed to make the web faster, safer, and more resilient. Although IPFS excels at hosting static content, hosting dynamic content remains a challenge. This article presents a design for hosting dynamic content on IPFS using InterPlanetary Linked Data (IPLD), InterPlanetary Name Service (IPNS), and DHT Provider Records.
 
+<!-- TOC start -->
+
+- [Understanding Key Components](#understanding-key-components)
+  * [CID](#cid)
+  * [IPLD](#ipld)
+  * [IPNS](#ipns)
+  * [PeerID](#peerid)
+  * [Provider Records](#provider-records)
+- [Defining the Problem](#defining-the-problem)
+- [Achieving Dynamicity](#achieving-dynamicity)
+  * [Dynamic-Content IDs](#dynamic-content-ids)
+  * [Read and Write Steps](#read-and-write-steps)
+    + [Writing](#writing)
+    + [Reading](#reading)
+- [Use-case: Edge-computed Applications](#use-case-edge-computed-applications)
+  * [Edge Devices](#edge-devices)
+  * [Pinning Servers](#pinning-servers)
+  * [Replication](#replication)
+- [Roadblocks and Workarounds](#roadblocks-and-workarounds)
+  * [No 3rd Party Publishing to DHT](#no-3rd-party-publishing-to-dht)
+  * [No Delegated Refreshing of IPNS OR Provider Records](#no-delegated-refreshing-of-ipns-or-provider-records)
+- [Example](#example)
+  * [Usage](#usage)
+    + [Clone the Repo](#clone-the-repo)
+    + [Install Packages](#install-packages)
+    + [Run Examples](#run-examples)
+  * [What's Happening?](#whats-happening)
+  * [Sample Outputs](#sample-outputs)
+- [Get Involved](#get-involved)
+- [Credits](#credits)
+- [FAQ](#faq)
+
+<!-- TOC end -->
+
 ## Understanding Key Components
 
 ### CID
