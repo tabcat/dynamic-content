@@ -28,6 +28,13 @@ A [Libp2p peerID](https://docs.libp2p.io/concepts/fundamentals/peers/#peer-id) i
 > **It's important to note that IPNS names can be derived from PeerIDs**
 ---
 
+## Defining the Problem
+
+IPFS pinning services simplify static content availability, but lack solutions for dynamic content.
+Current P2P dynamic content solutions often roll their own replication protocols and depend on reliable peers.
+This is an issue for local-first databases which are highly sharded and live on unreliable end-user devices.
+Developing a general and reliable layer for dynamic content would benefit all related solutions.
+
 ## Achieving Dynamicity
 
 The main contribution is the novel use of Provider Records.
