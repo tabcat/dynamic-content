@@ -7,7 +7,6 @@ The InterPlanetary File System (IPFS) is a distributed, peer-to-peer file system
 <!-- TOC start -->
 
 - [Understanding Key Components](#understanding-key-components)
-  * [CID](#cid)
   * [IPLD](#ipld)
   * [IPNS](#ipns)
   * [PeerID](#peerid)
