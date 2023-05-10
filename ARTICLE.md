@@ -101,6 +101,9 @@ The resulting IPNS names each resolve to the latest CID of a device's local repl
 
 All of this can happen without knowing any previous collaborators, or needing them to be online as long as their replica data is kept available via a pinner.
 
+If you are familiar with publishing Provider Records to the DHT, *you may have spotted a problem here*.
+The problem has to do with a check DHT servers do when receiving an `ADD_PROVIDER` query. This is addressed in [Roadblocks and Workarounds](#roadblocks-and-workarounds).
+
 <img src="https://raw.githubusercontent.com/tabcat/dynamic-content/master/.assets/dynamic-content-diagram.png" width="333">
 
 ---
