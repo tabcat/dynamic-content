@@ -78,8 +78,14 @@ Think pinning layer for dynamic content.
 
 ## Achieving Dynamicity
 
-There exist protocols for dynamic content that use IPFS with Libp2p Gossipsub to replicate; one example is [OrbitDB](https://github.com/orbitdb).
-In short, OrbitDB's replication protocol uses pubsub to find collaborators and share the latest root CIDs of replicas. Then these CIDs are used to fetch replicas from collaborators using IPFS.
+Let's look at a replication algorithm for one of the first databases on IPFS, [OrbitDB](https://github.com/orbitdb).
+
+The algorithm is roughly as follows:
+
+  1. Join a shared pubsub channel for the database.
+  2. On seeing a new pubsub peer in the shared channel, attempt to join a direct pubsub channel ([ipfs-pubsub-1on1](https://github.com/ipfs-shipyard/ipfs-pubsub-1on1)).
+  3. On commiting an update to local replica, advertise replica root CIDs on each direct pubsub channel.
+  4. On receiving a replica root CIDs advertisement on a direct pubsub, traverse and merge remote replica changes.
 
 The design presented in this article works similarly but replaces pubsub with Provider Records and IPNS. Essentially, all parts of replication get encoded into ~persistent IPFS components.
 
