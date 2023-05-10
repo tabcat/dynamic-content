@@ -124,8 +124,8 @@ This immutable manifest document describes the dynamic content.
 
 https://github.com/tabcat/dynamic-content/blob/e4df337d4f806ba530efa94b01e7bda2432ffa8d/src/dynamic-content.ts#L7-L30
 
-The code sample above shows a manifest document "describing" the dynamic content by including `protocol` and `parameters` properties.
-The resulting DCID, itself a result of the properties inside the manifest, uniquely identifies some dynamic content.
+This code sample shows a manifest document "describing" the dynamic content by including `protocol` and `parameters` properties.
+The DCID, a result of the properties inside the manifest, uniquely identifies some dynamic content.
 
 ---
 > **The code sample shown above is from an example at the end of this article that shows everything working together.**
