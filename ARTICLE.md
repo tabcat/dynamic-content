@@ -67,13 +67,13 @@ It's common to use a real-time protocol like [Gossipsub](https://docs.libp2p.io/
 Using this design to create [local-first](https://www.inkandswitch.com/local-first/) databases looks quite promising.
 However, local-first databases are often highly [sharded](https://en.wikipedia.org/wiki/Partition_(database)) and run on end-user devices.
 
-This presents the problem of having few and unreliable peers to sync with.
-One solution is to add reliable database peers to the mix, either self-hosted or on hosted by a service.
+This presents the problem of peers being few and unreliable to sync with.
+One solution is to add reliable database peers to the mix, either self-hosted or hosted by a service.
 There are two disadvantages to this approach:
 - Each project must build infra tools
 - Users need an instance of each database protocol used
 
-It would be benefit all related protocols to have general solution for asynchronous replication of dynamic content.<br/>
+It would benefit all related protocols to have a general solution for asynchronous replication of dynamic content.<br/>
 *Think pinning layer for dynamic content.*
 
 ## Achieving Dynamicity
@@ -84,7 +84,7 @@ The algorithm is roughly as follows:
 
   1. Join a shared pubsub channel for the database.
   2. On seeing a new pubsub peer in the shared channel, attempt to join a direct pubsub channel ([ipfs-pubsub-1on1](https://github.com/ipfs-shipyard/ipfs-pubsub-1on1)).
-  3. On commiting an update to local replica, advertise replica root CIDs on each direct pubsub channel.
+  3. On committing an update to the local replica, advertise replica root CIDs on each direct pubsub channel.
   4. On receiving a replica root CIDs advertisement on a direct pubsub, traverse and merge remote replica changes.
 
 The design presented in this article works similarly but replaces pubsub with Provider Records and IPNS. Essentially, all parts of replication get encoded into ~persistent IPFS components.
@@ -97,7 +97,7 @@ The design presented in this article works similarly but replaces pubsub with Pr
 ---
 
 The main contribution is the novel use of Provider Records.
-Instead of pointing from a CID to peerIDs of nodes hosting that content, point from a Dynamic-Content ID to IPNS names.
+Instead of pointing from a CID to peerIDs of nodes hosting that content, points from a Dynamic-Content ID to IPNS names.
 The resulting IPNS names each resolve to the latest CID of a device's local replica.
 
 All of this can happen without knowing any previous collaborators, or needing them to be online as long as their replica data is kept available via a pinner.
@@ -118,7 +118,7 @@ While CIDs are the hash of some static content, DCIDs are a permutation of the C
 This immutable manifest document describes the dynamic content.
 
 ---
-> **Disclaimer: Dynamic-Content IDs or DCIDs only exist for the purposes of this article. It is not an official spec or part of IPFS.**
+> **Disclaimer: Dynamic-Content IDs or DCIDs only exist for the purpose of this article. It is not an official spec or part of IPFS.**
 ---
 
 https://github.com/tabcat/dynamic-content/blob/e4df337d4f806ba530efa94b01e7bda2432ffa8d/src/dynamic-content.ts#L7-L30
@@ -423,6 +423,7 @@ Developers must reason how to design replicas for efficient storage and replicat
 
 <br/>
 
-**Q**: Could IPNS and Provider Records be swapped out for alternatives and still achieve the same goal?
+**Q**: Could IPNS and Provider Records be swapped out for alternatives and achieve the same goal?
 
-**A**: Absolutely. The goal is to provide a general and reliable replication layer. Additionally, the more common and widespread the building blocks used, the more existing infrastructure can be leveraged.
+**A**: Absolutely. The goal is to provide a general and reliable replication layer. Additionally, the more widespread the building blocks used, the more existing infrastructure can be leveraged.
+
