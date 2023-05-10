@@ -63,10 +63,18 @@ A [Libp2p peerID](https://docs.libp2p.io/concepts/fundamentals/peers/#peer-id) i
 
 ## Defining the Problem
 
-IPFS pinning services simplify keeping static content available, but lack solutions for dynamic content.
-Current P2P dynamic content solutions often roll their own replication protocols and depend on reliable peers.
-Depending on reliable peers is an issue for local-first databases, which are often highly sharded and live on end-user devices.
-Developing a general and reliable layer for dynamic content would benefit all related solutions.
+Databases on IPFS have been gaining more attention recently. In essence, these database protocols use IPLD to store replica data.
+It's common to use a real-time protocol like [Gossipsub](https://docs.libp2p.io/concepts/pubsub/overview/) with IPLD to sync database changes peer-to-peer.
+Using this design to create local-first databases looks quite promising.
+However, local-first databases are often highly [sharded](https://en.wikipedia.org/wiki/Partition_(database)) and run on end-user devices.
+
+This presents the problem of having few and unreliable peers to sync with.
+One solution is to add reliable database peers to the mix, either self-hosted or on hosted by a service.
+There are two disadvantages to this approach:
+  1. Each project must build infra tools
+  2. Users need an instance of each database protocol used
+It would be benefit all related protocols to have general solution for asynchronous replication of dynamic content.
+Think pinning layer for dynamic content.
 
 ## Achieving Dynamicity
 
