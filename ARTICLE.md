@@ -14,6 +14,7 @@ The InterPlanetary File System (IPFS) is a distributed, peer-to-peer file system
 - [Defining the Problem](#defining-the-problem)
 - [Achieving Dynamicity](#achieving-dynamicity)
   * [Dynamic-Content IDs](#dynamic-content-ids)
+  * [Manifest Document](#manifest-document)
   * [Read and Write Steps](#read-and-write-steps)
     + [Writing](#writing)
     + [Reading](#reading)
@@ -122,14 +123,30 @@ Most importantly for this article, they are used to point to IPNS names using Pr
 > **Disclaimer: Dynamic-Content IDs, or DCIDs, only exist for the purpose of this article. It is not an official spec or part of IPFS.**
 ---
 
+### Manifest Document
+
+Manifest documents, a term taken from OrbitDB, describe some unique dynamic content.
+Manifests are immutable and contain information like the protocol being used as well as protocol parameters.
+
+This document format has not been formally specified, but included below is a specification for this article:
+
+**dag-cbor**
+```js
+// cbor type reference: https://www.rfc-editor.org/rfc/rfc8949.html#section-3.1
+{
+  protocol: type 3
+  param: type 5
+}
+```
+
+`protocol`: a text string field containing a protocol id
+`param`: a key value map for exclusive use by the `protocol`
+
 https://github.com/tabcat/dynamic-content/blob/e4df337d4f806ba530efa94b01e7bda2432ffa8d/src/dynamic-content.ts#L7-L30
 
-This code sample shows a manifest document "describing" the dynamic content by including `protocol` and `parameters` properties.
-The DCID, a result of the properties inside the manifest, uniquely identifies some dynamic content.
-
----
-> **The code sample shown above is from an example at the end of this article that shows everything working together.**
----
+Above is a code block from the example attached to this article.
+It shows a manifest document "describing" the dynamic content by including `protocol` and `param` properties.
+It also shows the DCID being derived from the manifest's CID.
 
 ### Read and Write Steps
 
