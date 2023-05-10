@@ -63,7 +63,7 @@ A [Libp2p peerID](https://docs.libp2p.io/concepts/fundamentals/peers/#peer-id) i
 ## Defining the Problem
 
 Databases on IPFS have been gaining more attention recently. In essence, these database protocols use IPLD to store replica data.
-It's common to use a real-time protocol like [Gossipsub](https://docs.libp2p.io/concepts/pubsub/overview/) with IPLD to sync database changes peer-to-peer.
+And they commonly use a real-time protocol like [Gossipsub](https://docs.libp2p.io/concepts/pubsub/overview/) with IPLD to sync database changes peer-to-peer.
 Using this design to create [local-first](https://www.inkandswitch.com/local-first/) databases looks quite promising.
 However, local-first databases are often highly [sharded](https://en.wikipedia.org/wiki/Partition_(database)) and run on end-user devices.
 
@@ -78,9 +78,7 @@ It would benefit all related protocols to have a general solution for asynchrono
 
 ## Achieving Dynamicity
 
-Let's look at a replication algorithm for one of the first databases on IPFS, [OrbitDB](https://github.com/orbitdb).
-
-The algorithm is roughly as follows:
+Let's look at a replication algorithm for one of the first databases on IPFS, [OrbitDB](https://github.com/orbitdb). The algorithm is roughly as follows:
 
   1. Join a shared pubsub channel for the database.
   2. On seeing a new pubsub peer in the shared channel, attempt to join a direct pubsub channel ([ipfs-pubsub-1on1](https://github.com/ipfs-shipyard/ipfs-pubsub-1on1)).
@@ -106,8 +104,6 @@ All of this can happen without knowing any previous collaborators, or needing th
 
 ---
 > **The Merkle-DAGs built with IPLD provide a persistent and efficient layer for collaborators to sync.**
-
-> **Titling this article 'Replication on IPFS' might have been more accurate, but 'Hosting Dynamic Content on IPFS' sounded waaay better.**
 ---
 
 ### Dynamic-Content IDs
@@ -118,7 +114,7 @@ While CIDs are the hash of some static content, DCIDs are a permutation of the C
 This immutable manifest document describes the dynamic content.
 
 ---
-> **Disclaimer: Dynamic-Content IDs or DCIDs only exist for the purpose of this article. It is not an official spec or part of IPFS.**
+> **Disclaimer: Dynamic-Content IDs, or DCIDs, only exist for the purpose of this article. It is not an official spec or part of IPFS.**
 ---
 
 https://github.com/tabcat/dynamic-content/blob/e4df337d4f806ba530efa94b01e7bda2432ffa8d/src/dynamic-content.ts#L7-L30
@@ -147,6 +143,10 @@ Describes the process of reading/writing dynamic content to IPFS:
 2. Resolve providers' IPNS keys to CIDs
 3. Resolve CIDs to IPLD data
 4. Merge changes with the local replica
+
+---
+> **Titling this article 'Replication on IPFS' might have been more accurate, but 'Hosting Dynamic Content on IPFS' sounded waaay better.**
+---
 
 ## Use-case: Edge-computed Applications
 
@@ -189,11 +189,11 @@ This brings us to the roadblock...
 
 This check makes adding Provider Records for multiple peerIDs to the DHT difficult.
 Not great if you want to participate in multiple pieces of dynamic content as each will require its own IPNS name.
-The workaround, for now, will involve spinning up ephemeral libp2p nodes to add each IPNS name as a provider every [22hours](https://github.com/libp2p/specs/tree/master/kad-dht#content-provider-advertisement-and-discovery).
+The workaround, for now, will involve spinning up ephemeral libp2p nodes to refresh each IPNS name as a provider every [22hours](https://github.com/libp2p/specs/tree/master/kad-dht#content-provider-advertisement-and-discovery).
 
 ### No Delegated Refreshing of IPNS OR Provider Records
 
-To realize the edge-computed applications use-case, the delegation of publishing of IPNS and Provider Records to the DHT is necessary.
+To realize the edge-computed applications use-case, the delegated publishing of IPNS and Provider Records to the DHT is necessary.
 Unfortunately, there are no official plans to add this feature.
 
 ## Example
@@ -392,15 +392,15 @@ client2: online
 
 Big thanks to [@autonome](https://github.com/autonome) and [@SgtPooki](https://github.com/sgtpooki) for help writing this article!
 
-Also thanks to [@willscott](https://github.com/willscott) for answering all my DHT questions in [#libp2p-implementers](https://app.element.io/#/room/#libp2p-implementers:ipfs.io).
+Also thanks to [@willscott](https://github.com/willscott) for answering all my DHT questions in [#libp2p-implementers](https://app.element.io/#/room/#libp2p-implementers:ipfs.io)!
 
 ## Get Involved
 
-Sound interesting? Get involved! Come [chat](https://matrix.to/#/#hldb:matrix.org)!
+Sound interesting? Get involved! Come [chat](https://matrix.to/#/#hldb:matrix.org)
 
-Have a question? Create an [issue](https://github.com/tabcat/dynamic-content/issues)!
+Have a question? Create an [issue](https://github.com/tabcat/dynamic-content/issues)
 
-[I](https://github.com/tabcat)'m working on this in [tabcat/zzzync](https://github.com/tabcat/zzzync).
+[I](https://github.com/tabcat)'m implementing this in [tabcat/zzzync](https://github.com/tabcat/zzzync)
 
 ## FAQ
 
