@@ -214,7 +214,12 @@ This brings us to the roadblock...
 
 This check makes adding Provider Records for multiple peerIDs to the DHT difficult.
 Not great if you want to participate in multiple pieces of dynamic content as each will require its own IPNS name.
-The workaround, for now, will involve spinning up ephemeral libp2p nodes to refresh each IPNS name as a provider every [22hours](https://github.com/libp2p/specs/tree/master/kad-dht#content-provider-advertisement-and-discovery).
+This means that only the "self" IPNS key can be added to Provider Records.
+
+There are two workarounds for now:
+
+1. Use the self IPNS key to point to a CID storing replica root CIDs for all relevant dynamic content.
+2. Spin up *ephemeral* libp2p nodes to refresh each IPNS name as a provider every [22hours](https://github.com/libp2p/specs/tree/master/kad-dht#content-provider-advertisement-and-discovery).
 
 ### No Delegated Refreshing of IPNS OR Provider Records
 
