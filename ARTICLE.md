@@ -108,10 +108,15 @@ All of this can happen without knowing any previous collaborators, or needing th
 
 ### Dynamic-Content IDs
 
-A Dynamic-Content ID (DCID) is a CID. Both DCIDs and CIDs reference and identify content on the DHT.
-Where they diverge is how they are derived.
-While CIDs are the hash of some static content, DCIDs are a permutation of the CID of a manifest document.
+A Dynamic-Content ID (DCID) looks like a CID. Also, both DCIDs and CIDs reference and identify content on the DHT.
+
+*Where the two IDs differ is how they are created.*
+
+While CIDs are derived from the hash of some static content, DCIDs are a permutation of the CID of a manifest document.
 This immutable manifest document describes the dynamic content.
+
+As stated in the previous section, DCIDs are used to identify unique dynamic content.
+Most importantly for this article, they are used to point to IPNS names using Provider Records on the DHT.
 
 ---
 > **Disclaimer: Dynamic-Content IDs, or DCIDs, only exist for the purpose of this article. It is not an official spec or part of IPFS.**
