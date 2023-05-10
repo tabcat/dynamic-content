@@ -65,7 +65,7 @@ A [Libp2p peerID](https://docs.libp2p.io/concepts/fundamentals/peers/#peer-id) i
 
 Databases on IPFS have been gaining more attention recently. In essence, these database protocols use IPLD to store replica data.
 It's common to use a real-time protocol like [Gossipsub](https://docs.libp2p.io/concepts/pubsub/overview/) with IPLD to sync database changes peer-to-peer.
-Using this design to create local-first databases looks quite promising.
+Using this design to create [local-first](https://www.inkandswitch.com/local-first/) databases looks quite promising.
 However, local-first databases are often highly [sharded](https://en.wikipedia.org/wiki/Partition_(database)) and run on end-user devices.
 
 This presents the problem of having few and unreliable peers to sync with.
