@@ -71,10 +71,11 @@ However, local-first databases are often highly [sharded](https://en.wikipedia.o
 This presents the problem of having few and unreliable peers to sync with.
 One solution is to add reliable database peers to the mix, either self-hosted or on hosted by a service.
 There are two disadvantages to this approach:
-  1. Each project must build infra tools
-  2. Users need an instance of each database protocol used
-It would be benefit all related protocols to have general solution for asynchronous replication of dynamic content.
-Think pinning layer for dynamic content.
+- Each project must build infra tools
+- Users need an instance of each database protocol used
+
+It would be benefit all related protocols to have general solution for asynchronous replication of dynamic content.<br/>
+*Think pinning layer for dynamic content.*
 
 ## Achieving Dynamicity
 
