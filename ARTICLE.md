@@ -95,7 +95,7 @@ The design presented in this article works similarly but replaces pubsub with Pr
 ---
 
 The main contribution is the novel use of Provider Records.
-Instead of pointing from a CID to peerIDs of nodes hosting that content, points from a Dynamic-Content ID to IPNS names.
+Instead of pointing from a CID to peerIDs of nodes hosting that content, the records point from a Dynamic-Content ID to IPNS names.
 The resulting IPNS names each resolve to the latest CID of a device's local replica.
 
 All of this can happen without knowing any previous collaborators, or needing them to be online as long as their replica data is kept available via a pinner.
