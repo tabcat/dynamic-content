@@ -13,11 +13,11 @@ The InterPlanetary File System (IPFS) is a distributed, peer-to-peer file system
   * [Provider Records](#provider-records)
 - [Defining the Problem](#defining-the-problem)
 - [Achieving Dynamicity](#achieving-dynamicity)
-  * [Dynamic-Content IDs](#dynamic-content-ids)
-  * [Manifest Document](#manifest-document)
   * [Read and Write Steps](#read-and-write-steps)
     + [Writing](#writing)
     + [Reading](#reading)
+  * [Dynamic-Content IDs](#dynamic-content-ids)
+  * [Manifest Document](#manifest-document)
 - [Use-case: Edge-computed Applications](#use-case-edge-computed-applications)
   * [Edge Devices](#edge-devices)
   * [Pinning Servers](#pinning-servers)
@@ -107,6 +107,28 @@ All of this can happen without knowing any previous collaborators, or needing th
 > **The Merkle-DAGs built with IPLD provide a persistent and efficient layer for collaborators to sync.**
 ---
 
+### Read and Write Steps
+
+Describes the process of reading/writing dynamic content to IPFS:
+
+#### Writing
+
+1. Make changes to the local replica
+2. Push replica data to the IPLD pinner
+3. Republish IPNS to point to new CID root
+4. Add IPNS key as a provider of the Dynamic Content's ID
+
+#### Reading
+
+1. Query the DHT for Providers of the Dynamic Content's ID
+2. Resolve providers' IPNS keys to CIDs
+3. Resolve CIDs to IPLD data
+4. Merge changes with the local replica
+
+---
+> **Titling this article 'Replication on IPFS' might have been more accurate, but 'Hosting Dynamic Content on IPFS' sounded waaay better.**
+---
+
 ### Dynamic-Content IDs
 
 A Dynamic-Content ID (DCID) looks like a CID. Also, both DCIDs and CIDs reference and identify content on the DHT.
@@ -147,28 +169,6 @@ https://github.com/tabcat/dynamic-content/blob/e4df337d4f806ba530efa94b01e7bda24
 Above is a code block from the example attached to this article.
 It shows a manifest document "describing" the dynamic content by including `protocol` and `param` properties.
 It also shows the DCID being derived from the manifest's CID.
-
-### Read and Write Steps
-
-Describes the process of reading/writing dynamic content to IPFS:
-
-#### Writing
-
-1. Make changes to the local replica
-2. Push replica data to the IPLD pinner
-3. Republish IPNS to point to new CID root
-4. Add IPNS key as a provider of the Dynamic Content's ID
-
-#### Reading
-
-1. Query the DHT for Providers of the Dynamic Content's ID
-2. Resolve providers' IPNS keys to CIDs
-3. Resolve CIDs to IPLD data
-4. Merge changes with the local replica
-
----
-> **Titling this article 'Replication on IPFS' might have been more accurate, but 'Hosting Dynamic Content on IPFS' sounded waaay better.**
----
 
 ## Use-case: Edge-computed Applications
 
