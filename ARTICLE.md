@@ -113,14 +113,14 @@ All of this can happen without knowing any previous collaborators, or needing th
 
 ### Dynamic-Content IDs
 
----
-> **Disclaimer: Dynamic-Content IDs or DCIDs only exist for the purposes of this article. It is not an official spec or part of IPFS.**
----
-
 A Dynamic-Content ID (DCID) is a CID. Both DCIDs and CIDs reference and identify content on the DHT.
 Where they diverge is how they are derived.
 While CIDs are the hash of some static content, DCIDs are a permutation of the CID of a manifest document.
 This immutable manifest document describes the dynamic content.
+
+---
+> **Disclaimer: Dynamic-Content IDs or DCIDs only exist for the purposes of this article. It is not an official spec or part of IPFS.**
+---
 
 https://github.com/tabcat/dynamic-content/blob/e4df337d4f806ba530efa94b01e7bda2432ffa8d/src/dynamic-content.ts#L7-L30
 
