@@ -53,7 +53,7 @@ The InterPlanetary File System (IPFS) is a distributed, peer-to-peer file system
 
 ### PeerID
 
-A [Libp2p peerID](https://docs.libp2p.io/concepts/fundamentals/peers/#peer-id) is a unique identifier for each node in the network, derived from a [public key](https://en.wikipedia.org/wiki/Public-key_cryptography). PeerIDs help find, identify, and communicate with other nodes.
+A [Libp2p PeerID](https://docs.libp2p.io/concepts/fundamentals/peers/#peer-id) is a unique identifier for each node in the network, derived from a [public key](https://en.wikipedia.org/wiki/Public-key_cryptography). PeerIDs help find, identify, and communicate with other nodes.
 
 ### Provider Records
 
@@ -98,17 +98,17 @@ Let's look at a replication algorithm for one of the first databases on IPFS, [O
 The design presented in this article works similarly but replaces pubsub with Provider Records and IPNS. Essentially, all parts of replication get encoded into ~persistent IPFS components.
 
 - Provider Records to find collaborators
-- IPNS to point to the latest version of a replica
+- IPNS to point to the latest version of a device's replica
 
 ---
 > **Swapping pubsub for ~persistent components makes building on history without any collaborators online possible.**
 ---
 
 The main contribution is the novel use of Provider Records.
-Instead of pointing from a CID to peerIDs of nodes hosting that content, the records tie Dynamic-Content IDs to IPNS names.
-The resulting IPNS names each resolve to the latest CID of a device's local replica.
+Instead of tying a CID to PeerIDs of nodes hosting that content, the records tie a "Dynamic-Content ID" to IPNS names.
+Each IPNS name resolves to the latest CID of a device's local replica.
 
-All possible without knowing any previous collaborators or needing them to be online as long as their replica data is kept available via a pinner.
+*Collaborating on dynamic content is possible without knowing any previous collaborators or needing them to be online as long as their replica data is kept available via a pinner.*
 
 If you are familiar with publishing Provider Records to the DHT, *you may have spotted a problem here*.
 The source of the problem is a check DHT servers do when receiving an `ADD_PROVIDER` query, addressed in [Roadblocks and Workarounds](#roadblocks-and-workarounds).
@@ -230,9 +230,9 @@ This brings us to the roadblock...
 
 ### No 3rd Party Publishing to DHT
 
-[DHT servers validate that the peerIDs inside received Provider Records match the peerID of the node adding them.](https://github.com/libp2p/specs/tree/master/kad-dht#rpc-messages)
+[DHT servers validate that the PeerIDs inside received Provider Records match the PeerID of the node adding them.](https://github.com/libp2p/specs/tree/master/kad-dht#rpc-messages)
 
-This check makes adding Provider Records for multiple peerIDs to the DHT difficult.
+This check makes adding Provider Records for multiple PeerIDs to the DHT difficult.
 Not great if you want to participate in multiple pieces of dynamic content as each will require its own IPNS name.
 A Libp2p node may only add its own PeerId as a provider. This PeerId is also known as the "self" key.
 
@@ -479,7 +479,7 @@ Developers must reason how to design replicas for efficient storage and replicat
 
 **Q**: Provider Records do not support this use case. Could this affect DHT measurements?
 
-**A**: If this use case became prevalent, it could affect DHT measurements. Using Provider Records this way would make it look like the content providers are offline because the peerIDs are used only for IPNS.
+**A**: If this use case became prevalent, it could affect DHT measurements. Using Provider Records this way would make it look like the content providers are offline because the PeerIDs are used only for IPNS.
 
 <br/>
 
