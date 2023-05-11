@@ -39,6 +39,8 @@ The InterPlanetary File System (IPFS) is a distributed, peer-to-peer file system
 <!-- TOC end -->
 ---
 
+<br/>
+
 ## Understanding Key Components
 
 ### IPLD
@@ -61,6 +63,8 @@ A [Libp2p peerID](https://docs.libp2p.io/concepts/fundamentals/peers/#peer-id) i
 > **It's important to note that IPNS names and PeerIDs use the same [key structures](https://specs.ipfs.tech/ipns/ipns-record/#ipns-keys).**
 ---
 
+<br/>
+
 ## Defining the Problem
 
 Databases on IPFS have been gaining more attention recently. In essence, these database protocols use IPLD to store replica data.
@@ -79,6 +83,8 @@ It would benefit all related protocols to have a general solution for asynchrono
 *Think pinning layer for dynamic content.*
 
 This standardized layer would complement the app-specific protocols used for real-time replication.
+
+<br/>
 
 ## Achieving Dynamicity
 
@@ -113,6 +119,8 @@ The source of the problem is a check DHT servers do when receiving an `ADD_PROVI
 > **The Merkle-DAGs built with IPLD provide a persistent and efficient layer for collaborators to sync.**
 ---
 
+<br/>
+
 ### Read and Write Steps
 
 Describes the process of reading/writing dynamic content to IPFS:
@@ -135,6 +143,8 @@ Describes the process of reading/writing dynamic content to IPFS:
 > **Titling this article 'Replication on IPFS' might have been more accurate, but 'Hosting Dynamic Content on IPFS' sounded waaay better.**
 ---
 
+<br/>
+
 ### Dynamic-Content IDs
 
 A Dynamic-Content ID (DCID) looks like a CID. Also, both DCIDs and CIDs reference and identify content on the DHT.
@@ -150,6 +160,8 @@ They point to IPNS names by using Provider Records on the DHT.
 ---
 > **Disclaimer: Dynamic-Content IDs, or DCIDs, only exist for the purpose of this article. It is not an official spec or part of IPFS. (expect a name change because I also hate "DCIDs" 🤢🤮)**
 ---
+
+<br/>
 
 ### Manifest Document
 
@@ -176,6 +188,8 @@ https://github.com/tabcat/dynamic-content/blob/e4df337d4f806ba530efa94b01e7bda24
 Above is a code block from the example attached to this article.
 It shows a manifest document "describing" the dynamic content using the `protocol` and `param` properties.
 It also shows the DCID derived from the manifest's CID.
+
+<br/>
 
 ## Use-case: Edge-computed Applications
 
@@ -207,6 +221,8 @@ Combining two replication protocols with these properties results in preserved a
 > **Pinning servers, in this context, provide a general and reliable replication layer to fall back on when no other collaborators are online.**
 ---
 
+<br/>
+
 ## Roadblocks and Workarounds
 
 It should be clear now that using Provider Records this way was not intended.
@@ -229,6 +245,8 @@ There are two workarounds for now:
 
 Delegated publishing of IPNS and Provider Records is necessary to realize the edge-computed applications use case.
 Unfortunately, there are no official plans to add this feature.
+
+<br/>
 
 ## Example
 
@@ -272,6 +290,8 @@ There are two example scripts. One is interactive, meaning after the example run
 The scripts are `npm run example` and `npm run interactive`.
 
 **If something is broken please open an [issue](https://github.com/tabcat/dynamic-content/issues)!**
+
+<br/>
 
 ### What's Happening?
 
@@ -422,11 +442,15 @@ client2: online
 > **Note: in practice, the DHT queries related to the Dynamic Content's ID only need to be run initially. Afterward, a protocol meant for real-time replication with online collaborators can be used.**
 ---
 
+<br/>
+
 ## Credits
 
 Big thanks to [@autonome](https://github.com/autonome), [@SgtPooki](https://github.com/sgtpooki), and [@lidel](https://github.com/lidel) for help writing this article!
 
 Also thanks to [@willscott](https://github.com/willscott) for answering all my DHT questions in [#libp2p-implementers](https://app.element.io/#/room/#libp2p-implementers:ipfs.io)!
+
+<br/>
 
 ## Get Involved
 
@@ -435,6 +459,8 @@ Sound interesting? Get involved! Come [chat](https://matrix.to/#/#hldb:matrix.or
 Have a question? Create an [issue](https://github.com/tabcat/dynamic-content/issues)
 
 [I](https://github.com/tabcat)'m implementing this in [tabcat/zzzync](https://github.com/tabcat/zzzync)
+
+<br/>
 
 ## FAQ
 
@@ -460,3 +486,4 @@ Developers must reason how to design replicas for efficient storage and replicat
 **Q**: Could IPNS and Provider Records be swapped out for alternatives and achieve the same goal?
 
 **A**: Absolutely. The goal is to provide a general and reliable replication layer. Additionally, the more widespread the building blocks used, the more existing infrastructure can be leveraged.
+
