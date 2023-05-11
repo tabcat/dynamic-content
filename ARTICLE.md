@@ -251,7 +251,7 @@ Unfortunately, there are no official plans to add this feature.
 ## Example
 
 ---
-> **USES HELIA 😲🤩 !!!! DHT IN 😵‍💫 JAVASCRIPT 😵‍💫 😵 !! DYNAMIC CONTENT ON IPFS!?🧐!? **
+> **USES HELIA 😲🤩 !!!! DHT IN 😵‍💫 JAVASCRIPT 😵‍💫 😵 !! DYNAMIC CONTENT ON IPFS!?🧐!?**
 ---
 
 This example shows dynamic-content replication using IPLD, IPNS, and Provider Records.
