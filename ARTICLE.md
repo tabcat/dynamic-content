@@ -71,11 +71,14 @@ However, local-first databases are often highly [sharded](https://en.wikipedia.o
 This presents the problem of peers being few and unreliable to sync with.
 One solution is to add reliable database peers to the mix, either self-hosted or hosted by a service.
 There are two disadvantages to this approach:
-- Each project must build infra tools
-- Users need an instance of each database protocol used
+
+- Each project must build infra tooling
+- Users need a live instance of each database protocol used
 
 It would benefit all related protocols to have a general solution for asynchronous replication of dynamic content.<br/>
 *Think pinning layer for dynamic content.*
+
+This standardized layer would complement the app-specific protocols used for real-time replication.
 
 ## Achieving Dynamicity
 
@@ -84,7 +87,7 @@ Let's look at a replication algorithm for one of the first databases on IPFS, [O
   1. Join a shared pubsub channel for the database.
   2. On seeing a new pubsub peer in the shared channel, attempt to join a direct pubsub channel ([ipfs-pubsub-1on1](https://github.com/ipfs-shipyard/ipfs-pubsub-1on1)).
   3. On committing an update to the local replica, advertise replica root CIDs on each direct pubsub channel.
-  4. On receiving a replica root CIDs advertisement on a direct pubsub, traverse and merge remote replica changes.
+  4. On receiving a replica root CIDs advertisement on a direct pubsub, traverse the remote replica for changes to merge.
 
 The design presented in this article works similarly but replaces pubsub with Provider Records and IPNS. Essentially, all parts of replication get encoded into ~persistent IPFS components.
 
@@ -96,13 +99,13 @@ The design presented in this article works similarly but replaces pubsub with Pr
 ---
 
 The main contribution is the novel use of Provider Records.
-Instead of pointing from a CID to peerIDs of nodes hosting that content, the records point from a Dynamic-Content ID to IPNS names.
+Instead of pointing from a CID to peerIDs of nodes hosting that content, the records tie Dynamic-Content IDs to IPNS names.
 The resulting IPNS names each resolve to the latest CID of a device's local replica.
 
-All of this can happen without knowing any previous collaborators, or needing them to be online as long as their replica data is kept available via a pinner.
+All possible without knowing any previous collaborators or needing them to be online as long as their replica data is kept available via a pinner.
 
 If you are familiar with publishing Provider Records to the DHT, *you may have spotted a problem here*.
-The problem has to do with a check DHT servers do when receiving an `ADD_PROVIDER` query. This is addressed in [Roadblocks and Workarounds](#roadblocks-and-workarounds).
+The source of the problem is a check DHT servers do when receiving an `ADD_PROVIDER` query, addressed in [Roadblocks and Workarounds](#roadblocks-and-workarounds).
 
 <img src="https://raw.githubusercontent.com/tabcat/dynamic-content/master/.assets/dynamic-content-diagram.png" width="333">
 
@@ -136,24 +139,24 @@ Describes the process of reading/writing dynamic content to IPFS:
 
 A Dynamic-Content ID (DCID) looks like a CID. Also, both DCIDs and CIDs reference and identify content on the DHT.
 
-*Where the two IDs differ is how they are created.*
+*Where the two IDs differ is in their creation.*
 
-While CIDs are derived from the hash of some static content, DCIDs are a permutation of the CID of a manifest document.
-This immutable manifest document describes the dynamic content.
+While CIDs come from the hash of some static content, DCIDs are a permutation of the CID of a manifest document.
+This immutable manifest document "describes" the dynamic content.
 
-As stated in the previous section, DCIDs are used to identify unique dynamic content.
-Most importantly for this article, they are used to point to IPNS names using Provider Records on the DHT.
+As stated in the previous section, DCIDs identify unique dynamic content.
+They point to IPNS names by using Provider Records on the DHT.
 
 ---
-> **Disclaimer: Dynamic-Content IDs, or DCIDs, only exist for the purpose of this article. It is not an official spec or part of IPFS.**
+> **Disclaimer: Dynamic-Content IDs, or DCIDs, only exist for the purpose of this article. It is not an official spec or part of IPFS. (expect a name change because I also hate "DCIDs" 🤢🤮)**
 ---
 
 ### Manifest Document
 
-Manifest documents, a term taken from OrbitDB, describe some unique dynamic content.
-Manifests are immutable and contain information like the protocol being used as well as protocol parameters.
+Manifest documents, a term from OrbitDB, describe some unique dynamic content.
+Manifests are immutable and contain information like the protocol and parameter used.
 
-This document format has not been formally specified, but included below is a specification for this article:
+This document format is not formally specified, but included below is a specification for this article:
 
 **dag-cbor**
 ```js
@@ -165,13 +168,14 @@ This document format has not been formally specified, but included below is a sp
 ```
 
 `protocol`: a text string field containing a protocol id
+
 `param`: a key value map for exclusive use by the `protocol`
 
 https://github.com/tabcat/dynamic-content/blob/e4df337d4f806ba530efa94b01e7bda2432ffa8d/src/dynamic-content.ts#L7-L30
 
 Above is a code block from the example attached to this article.
-It shows a manifest document "describing" the dynamic content by including `protocol` and `param` properties.
-It also shows the DCID being derived from the manifest's CID.
+It shows a manifest document "describing" the dynamic content using the `protocol` and `param` properties.
+It also shows the DCID derived from the manifest's CID.
 
 ## Use-case: Edge-computed Applications
 
@@ -188,9 +192,9 @@ This context makes it challenging to build upon the history of collaborators, a 
 
 ### Pinning Servers
 
-- Reliable storage servers that maintain the availability of dynamic content on IPFS.
+- Reliable storage servers that keep dynamic content available on IPFS.
 - Pin IPLD replicas, and refresh IPNS and Provider Records for clients.
-- Executes no app-specific code
+- Execute no app-specific code
 
 ### Replication
 
@@ -214,22 +218,22 @@ This brings us to the roadblock...
 
 This check makes adding Provider Records for multiple peerIDs to the DHT difficult.
 Not great if you want to participate in multiple pieces of dynamic content as each will require its own IPNS name.
-This means that only the "self" IPNS key can be added to Provider Records.
+A Libp2p node may only add its own PeerId as a provider. This PeerId is also known as the "self" key.
 
 There are two workarounds for now:
 
-1. Use the self IPNS key to point to a CID storing replica root CIDs for all relevant dynamic content.
+1. Use the "self" key for IPNS, and have it point to a CID for a map(DCID -> root replica CID) for all relevant dynamic content.
 2. Spin up *ephemeral* libp2p nodes to refresh each IPNS name as a provider every [22hours](https://github.com/libp2p/specs/tree/master/kad-dht#content-provider-advertisement-and-discovery).
 
 ### No Delegated Refreshing of IPNS OR Provider Records
 
-To realize the edge-computed applications use-case, the delegated publishing of IPNS and Provider Records to the DHT is necessary.
+Delegated publishing of IPNS and Provider Records is necessary to realize the edge-computed applications use case.
 Unfortunately, there are no official plans to add this feature.
 
 ## Example
 
 ---
-> **USES HELIA!!!! DHT IN JAVASCRIPT!! DYNAMIC CONTENT ON IPFS!?!?**
+> **USES HELIA 😲🤩 !!!! DHT IN 😵‍💫 JAVASCRIPT 😵‍💫 😵 !! DYNAMIC CONTENT ON IPFS!?🧐!? **
 ---
 
 This example shows dynamic-content replication using IPLD, IPNS, and Provider Records.
@@ -434,7 +438,7 @@ Have a question? Create an [issue](https://github.com/tabcat/dynamic-content/iss
 
 ## FAQ
 
-**Q**: Why not just share an IPNS name to update?
+**Q**: Why not just share an IPNS name between devices to update?
 
 **A**: IPNS names are not built to handle concurrent writes and should not be extended to do so. They are signed, versioned documents that one device should be able to update. As shown here, they are essential for creating a system that can handle concurrent writes.
 
@@ -442,7 +446,7 @@ Have a question? Create an [issue](https://github.com/tabcat/dynamic-content/iss
 
 **Q**: Isn't this going to be slow?
 
-**A**: This design complements real-time replication by providing a general and reliable layer to fall back to. It adds two steps on top of resolving a CID 1) the DHT provider query and 2) the IPNS name resolutions.
+**A**: This design complements real-time replication by providing a general and reliable layer to fall back to. It adds two steps on top of resolving a CID: 1) the DHT provider query and 2) the IPNS name resolutions.
 Developers must reason how to design replicas for efficient storage and replication over IPLD.
 
 <br/>
@@ -456,4 +460,3 @@ Developers must reason how to design replicas for efficient storage and replicat
 **Q**: Could IPNS and Provider Records be swapped out for alternatives and achieve the same goal?
 
 **A**: Absolutely. The goal is to provide a general and reliable replication layer. Additionally, the more widespread the building blocks used, the more existing infrastructure can be leveraged.
-
