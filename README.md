@@ -2,7 +2,7 @@
 
 Dynamic content on IPFS using IPLD, IPNS, and Provider Records.
 
-<img src="./.assets/dynamic-content-diagram.png" width="500">
+<img src="./.assets/dynamic-ipfs.png" width="500">
 
 Read the [article](./ARTICLE.md)
 
