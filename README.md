@@ -11,3 +11,9 @@ Try out the [example](./ARTICLE.md#example)
 <br/>
 
 ### Questions? Create an [Issue](https://github.com/tabcat/dynamic-content/issues)!
+
+---
+
+### Publications:
+
+[IPFS Blog: How to Host Dynamic Content on IPFS](https://blog.ipfs.tech/2023-how-to-host-dynamic-content-on-ipfs/)
