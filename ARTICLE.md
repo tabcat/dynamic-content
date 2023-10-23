@@ -206,7 +206,7 @@ This context makes it challenging to build upon the history of collaborators, a 
 
 ### Pinning Servers
 
-- Reliable storage servers that keep dynamic content available on IPFS.
+- Reliable storage servers that keep content available on IPFS.
 - Pin IPLD replicas, and refresh IPNS and Provider Records for clients.
 - Execute no app-specific code
 
